@@ -1,4 +1,4 @@
-MobilityDB SQLAlchemy [![Documentation Status](https://readthedocs.org/projects/mobilitydb-sqlalchemy/badge/?version=latest)](https://mobilitydb-sqlalchemy.readthedocs.io/en/latest/?badge=latest)
+MobilityDB SQLAlchemy ![Test Status](https://github.com/adonmo/mobilitydb-sqlalchemy/workflows/Tests/badge.svg) [![Documentation Status](https://readthedocs.org/projects/mobilitydb-sqlalchemy/badge/?version=latest)](https://mobilitydb-sqlalchemy.readthedocs.io/en/latest/?badge=latest)
 ====
 This package provides extensions to [SQLAlchemy](http://sqlalchemy.org/) for interacting with [MobilityDB](https://github.com/ULB-CoDE-WIT/MobilityDB).
 

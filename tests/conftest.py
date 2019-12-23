@@ -1,3 +1,4 @@
+import os
 import pytest
 
 from sqlalchemy import create_engine
@@ -8,8 +9,10 @@ from .models import Base
 
 @pytest.fixture(scope="session")
 def engine():
+    hostname = os.environ.get("MOBILITYDB_HOST", "localhost")
+    port = os.environ.get("MOBILITYDB_PORT", 25432)
     _engine = create_engine(
-        "postgresql://docker:docker@localhost:25432/mobilitydb", echo=True
+        "postgresql://docker:docker@{}:{}/mobilitydb".format(hostname, port), echo=True
     )
     return _engine
 
