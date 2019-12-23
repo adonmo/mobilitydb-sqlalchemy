@@ -4,7 +4,7 @@ This package provides extensions to [SQLAlchemy](http://sqlalchemy.org/) for int
 
 # Installation
 ```sh
-pip install mobilitydb_sqlalchemy
+pip install mobilitydb-sqlalchemy
 ```
 
 # Usage
@@ -25,7 +25,7 @@ class Trips(Base):
 trips = session.query(Trips).all()
 ```
 
-For more details, read our [documentation](https://mobilitydb_sqlalchemy.readthedocs.io/en/latest/)
+For more details, read our [documentation](https://mobilitydb-sqlalchemy.readthedocs.io/en/latest/)
 
 # Contributing
 Issues and pull requests are welcome.

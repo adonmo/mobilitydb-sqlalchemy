@@ -14,10 +14,10 @@ readme = ''
 
 setup(
     long_description=readme,
-    name='mobilitydb_sqlalchemy',
+    name='mobilitydb-sqlalchemy',
     version='0.1.0',
     python_requires='==3.*,>=3.8.0',
-    project_urls={"documentation": "https://mobilitydb_sqlalchemy.readthedocs.io/en/latest/", "homepage": "https://github.com/adonmo/mobilitydb_sqlalchemy", "repository": "https://github.com/adonmo/mobilitydb_sqlalchemy"},
+    project_urls={"documentation": "https://mobilitydb-sqlalchemy.readthedocs.io/en/latest/", "homepage": "https://github.com/adonmo/mobilitydb-sqlalchemy", "repository": "https://github.com/adonmo/mobilitydb-sqlalchemy"},
     author='B Krishna Chaitanya',
     author_email='bkchaitan94@gmail.com',
     keywords='geo gis postgres mobilitydb sqlalchemy orm',

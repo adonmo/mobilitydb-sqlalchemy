@@ -3,7 +3,7 @@ from = {format = "poetry", path = "pyproject.toml"}
 to = {format = "setuppy", path = "setup.py"}
 
 [tool.poetry]
-name = "mobilitydb_sqlalchemy"
+name = "mobilitydb-sqlalchemy"
 version = "0.1.0"
 description = ""
 authors = ["B Krishna Chaitanya <bkchaitan94@gmail.com>"]
@@ -28,9 +28,9 @@ classifiers = [
     "Topic :: Scientific/Engineering :: GIS",
 ]
 keywords=["geo", "gis", "postgres", "mobilitydb", "sqlalchemy", "orm"]
-homepage = "https://github.com/adonmo/mobilitydb_sqlalchemy"
-repository = "https://github.com/adonmo/mobilitydb_sqlalchemy"
-documentation = "https://mobilitydb_sqlalchemy.readthedocs.io/en/latest/"
+homepage = "https://github.com/adonmo/mobilitydb-sqlalchemy"
+repository = "https://github.com/adonmo/mobilitydb-sqlalchemy"
+documentation = "https://mobilitydb-sqlalchemy.readthedocs.io/en/latest/"
 
 [tool.poetry.dependencies]
 python = "^3.8"
