@@ -12,6 +12,15 @@
 
 import os
 import sys
+import tomlkit
+
+
+def get_project_details():
+    with open("../pyproject.toml") as pyproject:
+        file_contents = pyproject.read()
+
+    return tomlkit.parse(file_contents)["tool"]["poetry"]
+
 
 sys.path.insert(0, os.path.abspath(".."))
 
@@ -23,7 +32,7 @@ copyright = "2019, Bommakanti Krishna Chaitanya"
 author = "Bommakanti Krishna Chaitanya"
 
 # The full version, including alpha/beta/rc tags
-release = "0.1.0"
+release = get_project_details()["version"]
 
 
 # -- General configuration ---------------------------------------------------

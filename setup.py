@@ -15,8 +15,8 @@ readme = ''
 setup(
     long_description=readme,
     name='mobilitydb-sqlalchemy',
-    version='0.1.0',
-    python_requires='==3.*,>=3.8.0',
+    version='0.1.1',
+    python_requires='>=3.6',
     project_urls={"documentation": "https://mobilitydb-sqlalchemy.readthedocs.io/en/latest/", "homepage": "https://github.com/adonmo/mobilitydb-sqlalchemy", "repository": "https://github.com/adonmo/mobilitydb-sqlalchemy"},
     author='B Krishna Chaitanya',
     author_email='bkchaitan94@gmail.com',
@@ -26,5 +26,5 @@ setup(
     package_dir={"": "."},
     package_data={},
     install_requires=['geoalchemy2==0.*,>=0.6.3', 'pandas==0.*,>=0.25.3', 'shapely==1.*,>=1.6.4', 'sqlalchemy==1.*,>=1.3.11'],
-    extras_require={"dev": ["black==19.*,>=19.10.0", "dephell==0.*,>=0.7.9", "fissix==19.*,>=19.2.0", "pre-commit==1.*,>=1.20.0", "psycopg2==2.*,>=2.8.4", "pytest==5.*,>=5.3.2", "sphinx==2.*,>=2.3.0", "sphinx-rtd-theme==0.*,>=0.4.3"]},
+    extras_require={"dev": ["black==19.*,>=19.10.0", "dephell==0.*,>=0.7.9", "fissix==19.*,>=19.2.0", "pre-commit==1.*,>=1.20.0", "psycopg2==2.*,>=2.8.4", "pytest==5.*,>=5.3.2"], "docs": ["sphinx==2.*,>=2.3.1", "sphinx-rtd-theme==0.*,>=0.4.3", "tomlkit==0.*,>=0.5.8"]},
 )
