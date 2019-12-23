@@ -1,0 +1,54 @@
+[tool.dephell.main]
+from = {format = "poetry", path = "pyproject.toml"}
+to = {format = "setuppy", path = "setup.py"}
+
+[tool.poetry]
+name = "mobilitydb_sqlalchemy"
+version = "0.1.0"
+description = ""
+authors = ["B Krishna Chaitanya <bkchaitan94@gmail.com>"]
+packages = [
+    { include = "mobilitydb_sqlalchemy" },
+]
+# https://pypi.org/classifiers/
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Plugins",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Topic :: Database :: Database Engines/Servers",
+    "Topic :: Scientific/Engineering :: GIS",
+]
+keywords=["geo", "gis", "postgres", "mobilitydb", "sqlalchemy", "orm"]
+homepage = "https://github.com/adonmo/mobilitydb_sqlalchemy"
+repository = "https://github.com/adonmo/mobilitydb_sqlalchemy"
+documentation = "https://mobilitydb_sqlalchemy.readthedocs.io/en/latest/"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+pandas = "^0.25.3"
+sqlalchemy = "^1.3.11"
+geoalchemy2 = "^0.6.3"
+shapely = "^1.6.4"
+
+[tool.poetry.dev-dependencies]
+dephell = "^0.7.9"
+fissix = "^19.2b1"
+pytest = "^5.3.2"
+psycopg2 = "^2.8.4"
+pre-commit = "^1.20.0"
+black = "^19.10b0"
+sphinx = "^2.3.0"
+sphinx-rtd-theme = "^0.4.3"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
