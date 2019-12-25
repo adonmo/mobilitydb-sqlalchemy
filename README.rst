@@ -41,8 +41,7 @@ Usage
 
     trips = session.query(Trips).all()
 
-    # Querying using MobilityDB functions
-    # Value at a given timestamp
+    # Querying using MobilityDB functions, for example - valueAtTimestamp
     session.query(
         Trips.car_id,
         func.asText(
@@ -87,7 +86,7 @@ Spin up a mobilitydb instance
 Run the tests
 ^^^^^^^^^^^^^
 
-movingpandas is an optional dependency - but to run tests you would need it. So if this is your first time rnning tests, install it by running:
+movingpandas is an optional dependency - but to run tests you would need it. So if this is your first time running tests, install it by running:
 
 .. code-block:: sh
 

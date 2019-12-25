@@ -2,7 +2,7 @@ Quickstart
 ----------
 
 .. code-block:: python
-    :emphasize-lines: 1, 9
+    :emphasize-lines: 1, 11, 19
     :caption: Example usage of the **TGeomPoint** class as a column in a table defined using SQLAlchemy's declarative API
 
     from mobilitydb_sqlalchemy import TGeomPoint
@@ -18,6 +18,14 @@ Quickstart
         trip = Column(TGeomPoint)
 
     trips = session.query(Trips).all()
+
+    # Querying using MobilityDB functions, for example - valueAtTimestamp
+    session.query(
+        Trips.car_id,
+        func.asText(
+            func.valueAtTimestamp(Trips.trip, datetime.datetime(2012, 1, 1, 8, 10, 0))
+        ),
+    ).all()
 
 
 Using MobilityDB functions
