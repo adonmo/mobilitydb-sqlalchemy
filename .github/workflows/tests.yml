@@ -37,8 +37,12 @@ jobs:
     - name: Setup dependencies
       run: |
         apt-get -qq update
-        apt-get -yqq install libgeos-dev
+        apt-get -yqq install libgeos-dev libproj-dev proj-data proj-bin libgdal-dev
         poetry install
+        poetry run pip install cython
+        poetry run pip install git+https://github.com/SciTools/cartopy.git --no-binary cartopy
+        poetry run pip install movingpandas
+        poetry run pip install rasterio --upgrade
 
     - name: Test with pytest
       run: poetry run pytest

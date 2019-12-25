@@ -36,3 +36,10 @@ class Trips(Base):
     car_id = Column(Integer, primary_key=True)
     trip_id = Column(Integer, primary_key=True)
     trip = Column(TGeomPoint)
+
+
+class TripsWithMovingPandas(Base):
+    __tablename__ = "trips_test_002"
+    car_id = Column(Integer, primary_key=True)
+    trip_id = Column(Integer, primary_key=True)
+    trip = Column(TGeomPoint(use_movingpandas=True))

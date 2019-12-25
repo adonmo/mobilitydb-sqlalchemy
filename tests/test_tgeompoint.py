@@ -8,7 +8,7 @@ from shapely.wkt import loads
 from sqlalchemy import alias, func
 from sqlalchemy.exc import StatementError
 
-from .models import Trips
+from .models import Trips, TripsWithMovingPandas
 
 
 def test_simple_insert(session):
@@ -47,6 +47,40 @@ def test_simple_insert(session):
         assert result.trip.iloc[0].geometry == Point(0, 0)
         assert result.trip.iloc[1].geometry == Point(2, 0)
         assert result.trip.iloc[2].geometry == Point(2, -1.98)
+
+
+def test_simple_insert_with_movingpandas(session):
+    import movingpandas as mpd
+    from geopandas import GeoDataFrame
+
+    df = pd.DataFrame(
+        [
+            {"geometry": Point(0, 0), "t": datetime.datetime(2012, 1, 1, 8, 0, 0),},
+            {"geometry": Point(2, 0), "t": datetime.datetime(2012, 1, 1, 8, 10, 0),},
+            {
+                "geometry": Point(2, -1.98),
+                "t": datetime.datetime(2012, 1, 1, 8, 15, 0),
+            },
+        ]
+    ).set_index("t")
+    geo_df = GeoDataFrame(df)
+    traj = mpd.Trajectory(1, geo_df)
+    session.add(TripsWithMovingPandas(car_id=1, trip_id=1, trip=traj,))
+    session.commit()
+
+    sql = session.query(TripsWithMovingPandas).filter(
+        TripsWithMovingPandas.trip_id == 1
+    )
+    assert sql.count() == 1
+
+    results = sql.all()
+    for result in results:
+        assert result.car_id == 1
+        assert result.trip_id == 1
+        assert result.trip.df.size == 3
+        assert result.trip.df.iloc[0].geometry == Point(0, 0)
+        assert result.trip.df.iloc[1].geometry == Point(2, 0)
+        assert result.trip.df.iloc[2].geometry == Point(2, -1.98)
 
 
 def test_wkt_values_are_valid(session):
