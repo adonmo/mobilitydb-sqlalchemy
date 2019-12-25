@@ -7,18 +7,16 @@ from .models import TemporalBools
 
 
 def test_simple_insert(session):
-    session.add(
-        TemporalBools(
-            tdata=pd.DataFrame(
-                [
-                    {"value": False, "t": datetime.datetime(2018, 1, 1, 12, 0, 0)},
-                    {"value": True, "t": datetime.datetime(2018, 1, 1, 12, 6, 0)},
-                    {"value": True, "t": datetime.datetime(2018, 1, 1, 12, 10, 0)},
-                    {"value": False, "t": datetime.datetime(2018, 1, 1, 12, 15, 0)},
-                ]
-            ).set_index("t"),
-        )
-    )
+    df = pd.DataFrame(
+        [
+            {"value": False, "t": datetime.datetime(2018, 1, 1, 12, 0, 0)},
+            {"value": True, "t": datetime.datetime(2018, 1, 1, 12, 6, 0)},
+            {"value": True, "t": datetime.datetime(2018, 1, 1, 12, 10, 0)},
+            {"value": False, "t": datetime.datetime(2018, 1, 1, 12, 15, 0)},
+        ]
+    ).set_index("t")
+
+    session.add(TemporalBools(tdata=df,))
     session.commit()
 
     sql = session.query(TemporalBools).filter(TemporalBools.id == 1)
@@ -34,33 +32,26 @@ def test_simple_insert(session):
 
 
 def test_float_values_are_invalid(session):
+    df = pd.DataFrame(
+        [
+            {"value": 0, "t": datetime.datetime(2018, 1, 1, 12, 0, 0)},
+            {"value": 8.1, "t": datetime.datetime(2018, 1, 1, 12, 6, 0)},
+        ]
+    ).set_index("t")
+
     with pytest.raises(StatementError):
-        session.add(
-            TemporalBools(
-                tdata=pd.DataFrame(
-                    [
-                        {"value": 0, "t": datetime.datetime(2018, 1, 1, 12, 0, 0)},
-                        {"value": 8.1, "t": datetime.datetime(2018, 1, 1, 12, 6, 0)},
-                    ]
-                ).set_index("t"),
-            )
-        )
+        session.add(TemporalBools(tdata=df,))
         session.commit()
 
 
 def test_str_values_are_invalid(session):
+    df = pd.DataFrame(
+        [
+            {"value": "True", "t": datetime.datetime(2018, 1, 1, 12, 0, 0)},
+            {"value": "False", "t": datetime.datetime(2018, 1, 1, 12, 6, 0),},
+        ]
+    ).set_index("t")
+
     with pytest.raises(StatementError):
-        session.add(
-            TemporalBools(
-                tdata=pd.DataFrame(
-                    [
-                        {"value": "True", "t": datetime.datetime(2018, 1, 1, 12, 0, 0)},
-                        {
-                            "value": "False",
-                            "t": datetime.datetime(2018, 1, 1, 12, 6, 0),
-                        },
-                    ]
-                ).set_index("t"),
-            )
-        )
+        session.add(TemporalBools(tdata=df,))
         session.commit()

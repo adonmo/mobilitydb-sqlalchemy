@@ -12,28 +12,15 @@ from .models import Trips, TripsWithMovingPandas
 
 
 def test_simple_insert(session):
-    session.add(
-        Trips(
-            car_id=1,
-            trip_id=1,
-            trip=pd.DataFrame(
-                [
-                    {
-                        "geometry": Point(0, 0),
-                        "t": datetime.datetime(2012, 1, 1, 8, 0, 0),
-                    },
-                    {
-                        "geometry": Point(2, 0),
-                        "t": datetime.datetime(2012, 1, 1, 8, 10, 0),
-                    },
-                    {
-                        "geometry": Point(2, -1.98),
-                        "t": datetime.datetime(2012, 1, 1, 8, 15, 0),
-                    },
-                ]
-            ).set_index("t"),
-        )
-    )
+    df = pd.DataFrame(
+        [
+            {"geometry": Point(0, 0), "t": datetime.datetime(2012, 1, 1, 8, 0, 0),},
+            {"geometry": Point(2, 0), "t": datetime.datetime(2012, 1, 1, 8, 10, 0),},
+            {"geometry": Point(2, -1.9), "t": datetime.datetime(2012, 1, 1, 8, 15, 0),},
+        ]
+    ).set_index("t")
+
+    session.add(Trips(car_id=1, trip_id=1, trip=df,))
     session.commit()
 
     sql = session.query(Trips).filter(Trips.trip_id == 1)
@@ -46,7 +33,7 @@ def test_simple_insert(session):
         assert result.trip.size == 3
         assert result.trip.iloc[0].geometry == Point(0, 0)
         assert result.trip.iloc[1].geometry == Point(2, 0)
-        assert result.trip.iloc[2].geometry == Point(2, -1.98)
+        assert result.trip.iloc[2].geometry == Point(2, -1.9)
 
 
 def test_simple_insert_with_movingpandas(session):
@@ -84,103 +71,65 @@ def test_simple_insert_with_movingpandas(session):
 
 
 def test_wkt_values_are_valid(session):
+    df = pd.DataFrame(
+        [
+            {
+                "geometry": "Point(-3.1 4.7770)",
+                "t": datetime.datetime(2012, 1, 1, 12, 0, 0),
+            },
+        ]
+    ).set_index("t")
+
     with pytest.raises(StatementError):
-        session.add(
-            Trips(
-                car_id=1,
-                trip_id=1,
-                trip=pd.DataFrame(
-                    [
-                        {
-                            "geometry": "Point(-3.1 4.7770)",
-                            "t": datetime.datetime(2012, 1, 1, 12, 0, 0),
-                        },
-                    ]
-                ).set_index("t"),
-            )
-        )
+        session.add(Trips(car_id=1, trip_id=1, trip=df,))
         session.commit()
 
 
 def test_str_values_are_invalid(session):
+    df = pd.DataFrame(
+        [
+            {"geometry": 0, "t": datetime.datetime(2012, 1, 1, 12, 0, 0)},
+            {"geometry": "8", "t": datetime.datetime(2012, 1, 1, 12, 6, 0)},
+        ]
+    ).set_index("t")
+
     with pytest.raises(StatementError):
-        session.add(
-            Trips(
-                car_id=1,
-                trip_id=1,
-                trip=pd.DataFrame(
-                    [
-                        {"geometry": 0, "t": datetime.datetime(2012, 1, 1, 12, 0, 0)},
-                        {"geometry": "8", "t": datetime.datetime(2012, 1, 1, 12, 6, 0)},
-                    ]
-                ).set_index("t"),
-            )
-        )
+        session.add(Trips(car_id=1, trip_id=1, trip=df,))
         session.commit()
 
 
 def test_float_values_are_invalid(session):
+    df = pd.DataFrame(
+        [{"geometry": 8.1, "t": datetime.datetime(2012, 1, 1, 12, 6, 0)},]
+    ).set_index("t")
+
     with pytest.raises(StatementError):
-        session.add(
-            Trips(
-                car_id=1,
-                trip_id=1,
-                trip=pd.DataFrame(
-                    [{"geometry": 8.1, "t": datetime.datetime(2012, 1, 1, 12, 6, 0)},]
-                ).set_index("t"),
-            )
-        )
+        session.add(Trips(car_id=1, trip_id=1, trip=df,))
         session.commit()
 
 
 def test_mobility_functions(session):
-    session.add(
-        Trips(
-            car_id=10,
-            trip_id=1,
-            trip=pd.DataFrame(
-                [
-                    {
-                        "geometry": Point(0, 0),
-                        "t": datetime.datetime(2012, 1, 1, 8, 0, 0),
-                    },
-                    {
-                        "geometry": Point(2, 0),
-                        "t": datetime.datetime(2012, 1, 1, 8, 10, 0),
-                    },
-                    {
-                        "geometry": Point(2, 1),
-                        "t": datetime.datetime(2012, 1, 1, 8, 15, 0),
-                    },
-                ]
-            ).set_index("t"),
-        )
-    )
+    df1 = pd.DataFrame(
+        [
+            {"geometry": Point(0, 0), "t": datetime.datetime(2012, 1, 1, 8, 0, 0),},
+            {"geometry": Point(2, 0), "t": datetime.datetime(2012, 1, 1, 8, 10, 0),},
+            {"geometry": Point(2, 1), "t": datetime.datetime(2012, 1, 1, 8, 15, 0),},
+        ]
+    ).set_index("t")
+
+    session.add(Trips(car_id=10, trip_id=1, trip=df1,))
 
     session.commit()
 
-    session.add(
-        Trips(
-            car_id=20,
-            trip_id=1,
-            trip=pd.DataFrame(
-                [
-                    {
-                        "geometry": Point(0, 0),
-                        "t": datetime.datetime(2012, 1, 1, 8, 5, 0),
-                    },
-                    {
-                        "geometry": Point(1, 1),
-                        "t": datetime.datetime(2012, 1, 1, 8, 10, 0),
-                    },
-                    {
-                        "geometry": Point(3, 3),
-                        "t": datetime.datetime(2012, 1, 1, 8, 20, 0),
-                    },
-                ]
-            ).set_index("t"),
-        )
-    )
+    df2 = pd.DataFrame(
+        [
+            {"geometry": Point(0, 0), "t": datetime.datetime(2012, 1, 1, 8, 5, 0),},
+            {"geometry": Point(1, 1), "t": datetime.datetime(2012, 1, 1, 8, 10, 0),},
+            {"geometry": Point(3, 3), "t": datetime.datetime(2012, 1, 1, 8, 20, 0),},
+        ]
+    ).set_index("t")
+
+    session.add(Trips(car_id=20, trip_id=1, trip=df2,))
 
     session.commit()
 

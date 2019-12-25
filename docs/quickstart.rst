@@ -28,6 +28,125 @@ Quickstart
     ).all()
 
 
+Inserting temporal data
+-----------------------
+
+mobilitydb-sqlalchemy lets you use pandas DataFrame (which are great for timeseries data) while you are in the Python world, and translates it back and for to temporal types defined in mobilitydb.
+
+A point to note here is that we assume that the DataFrame's columns are named "value" (except in case of TGeomPoint where it is "geometry") and "t" for the data and the timestamp respectively.
+
+Here we show how we can store numeric data which changes over time (i.e. tfloat), using the :class:`mobilitydb_sqlalchemy.types.TFloat.TFloat` class.
+
+Running the following code will create a new table with a tfloat column, and insert one row of hardcoded data into it.
+
+.. code-block:: python
+    :emphasize-lines: 4, 19, 32, 33, 34
+
+    import datetime
+    import pandas as pd
+
+    from mobilitydb_sqlalchemy import TFloat
+    from sqlalchemy import Column, Integer, create_engine
+    from sqlalchemy.ext.declarative import declarative_base
+    from sqlalchemy.orm import sessionmaker
+
+    # Setup the engine and session, make sure you set the right url to connect to your mobilitydb instance
+    engine = create_engine("postgresql://docker:docker@localhost:25432/mobilitydb", echo=True)
+    session = sessionmaker(bind=engine)()
+
+    # Setup and create the tables (only one in our case here)
+    Base = declarative_base()
+
+    class TemporalFloats(Base):
+        __tablename__ = "tfloat_test_001"
+        id = Column(Integer, primary_key=True)
+        tdata = Column(TFloat(True, False))
+
+    Base.metadata.create_all(engine)
+
+    # Prepare and insert the data
+    df = pd.DataFrame(
+        [
+            {"value": 0, "t": datetime.datetime(2018, 1, 1, 12, 0, 0)},
+            {"value": 8.2, "t": datetime.datetime(2018, 1, 1, 12, 6, 0)},
+            {"value": 6.6, "t": datetime.datetime(2018, 1, 1, 12, 10, 0)},
+            {"value": 9.1, "t": datetime.datetime(2018, 1, 1, 12, 15, 0)},
+        ]
+    ).set_index("t")
+    row = TemporalFloats(tdata=df,)
+    session.add(row)
+    session.commit()
+
+
+
+Inserting TGeomPoint data
+-------------------------
+
+While creating the DataFrame, make sure the column is named "geometry" and not "value". This is to maintain compatibility with movingpandas. We can use Point objects from shapely for preparing the geometry data.
+
+.. code-block:: python
+    :emphasize-lines: 1, 2, 8, 21, 22, 23
+
+    from mobilitydb_sqlalchemy import TGeomPoint
+    from shapely.geometry import Point
+
+    class Trips(Base):
+        __tablename__ = "trips_test_001"
+        car_id = Column(Integer, primary_key=True)
+        trip_id = Column(Integer, primary_key=True)
+        trip = Column(TGeomPoint)
+
+    Base.metadata.create_all(engine)
+
+    # Prepare and insert the data
+    df = pd.DataFrame(
+        [
+            {"geometry": Point(0, 0), "t": datetime.datetime(2012, 1, 1, 8, 0, 0),},
+            {"geometry": Point(2, 0), "t": datetime.datetime(2012, 1, 1, 8, 10, 0),},
+            {"geometry": Point(2, -1.9), "t": datetime.datetime(2012, 1, 1, 8, 15, 0),},
+        ]
+    ).set_index("t")
+
+    trip = Trips(car_id=1, trip_id=1, trip=df,)
+    session.add(trip)
+    session.commit()
+
+
+Inserting TGeomPoint data, using movingpandas
+---------------------------------------------
+
+movingpandas is an optional dependency, but if installed, you can insert TGeomPoint data with Trajectory objects directly. Just be sure to enable the flag use_movingpandas on the column beforehand.
+
+.. code-block:: python
+    :emphasize-lines: 1, 2, 8, 22, 23, 24, 25
+
+    from mobilitydb_sqlalchemy import TGeomPoint
+    from shapely.geometry import Point
+
+    class Trips(Base):
+        __tablename__ = "trips_test_001"
+        car_id = Column(Integer, primary_key=True)
+        trip_id = Column(Integer, primary_key=True)
+        trip = Column(TGeomPoint(use_movingpandas=True))
+
+    Base.metadata.create_all(engine)
+
+    # Prepare and insert the data
+    df = pd.DataFrame(
+        [
+            {"geometry": Point(0, 0), "t": datetime.datetime(2012, 1, 1, 8, 0, 0),},
+            {"geometry": Point(2, 0), "t": datetime.datetime(2012, 1, 1, 8, 10, 0),},
+            {"geometry": Point(2, -1.9), "t": datetime.datetime(2012, 1, 1, 8, 15, 0),},
+        ]
+    ).set_index("t")
+    geo_df = GeoDataFrame(df)
+
+    traj = mpd.Trajectory(1, geo_df)
+    trip = Trips(car_id=1, trip_id=1, trip=traj,)
+    session.add(trip)
+    session.commit()
+
+
 Using MobilityDB functions
 --------------------------
 
