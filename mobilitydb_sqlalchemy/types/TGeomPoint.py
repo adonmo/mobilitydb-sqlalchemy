@@ -74,7 +74,7 @@ class TGeomPoint(TBaseType):
             if use_movingpandas:
                 if MOVING_PANDAS:
                     geo_df = GeoDataFrame(df)
-                    traj = mpd.Trajectory(1, geo_df)
+                    traj = mpd.Trajectory(geo_df, 1)
                     return traj
                 else:
                     raise ModuleNotFoundError(
