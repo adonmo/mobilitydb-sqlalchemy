@@ -51,7 +51,7 @@ def test_simple_insert_with_movingpandas(session):
         ]
     ).set_index("t")
     geo_df = GeoDataFrame(df)
-    traj = mpd.Trajectory(1, geo_df)
+    traj = mpd.Trajectory(geo_df, 1)
     session.add(TripsWithMovingPandas(car_id=1, trip_id=1, trip=traj,))
     session.commit()
 
