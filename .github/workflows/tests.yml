@@ -3,49 +3,48 @@ name: Tests
 on:
   push:
     branches:
-    - master
+      - master
   pull_request:
     branches:
-    - master
+      - master
 
 jobs:
   container-job:
     runs-on: ubuntu-latest
 
     container:
-      image:  python
+      image: python
 
     services:
       mobilitydb:
         image: codewit/mobilitydb
         ports:
-        - 5432:5432
+          - 5432:5432
 
     steps:
-    - uses: actions/checkout@v1
+      - uses: actions/checkout@v1
 
-    - name: Set up Python 3.8
-      uses: actions/setup-python@v1
-      with:
-        python-version: 3.8
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
 
-    - name: Setup Poetry (preview version)
-      uses: dschep/install-poetry-action@v1.2
-      with:
-        preview: true
+      - name: Setup Poetry (preview version)
+        uses: dschep/install-poetry-action@v1.2
+        with:
+          preview: true
 
-    - name: Setup dependencies
-      run: |
-        apt-get -qq update
-        apt-get -yqq install libgeos-dev libproj-dev proj-data proj-bin libgdal-dev
-        poetry install
-        poetry run pip install cython
-        poetry run pip install git+https://github.com/SciTools/cartopy.git --no-binary cartopy
-        poetry run pip install movingpandas
-        poetry run pip install rasterio --upgrade
+      - name: Setup dependencies
+        run: |
+          apt-get -qq update
+          apt-get -yqq install libgeos-dev libproj-dev proj-data proj-bin libgdal-dev
+          poetry install
+          poetry run pip install cython
+          poetry run pip install git+https://github.com/SciTools/cartopy.git --no-binary cartopy
+          poetry run pip install movingpandas
 
-    - name: Test with pytest
-      run: poetry run pytest
-      env:
-        MOBILITYDB_HOST: mobilitydb
-        MOBILITYDB_PORT: ${{ job.services.mobilitydb.ports[5432] }}
+      - name: Test with pytest
+        run: poetry run pytest
+        env:
+          MOBILITYDB_HOST: mobilitydb
+          MOBILITYDB_PORT: ${{ job.services.mobilitydb.ports[5432] }}

@@ -264,11 +264,8 @@ For this the optional dependency "movingpandas" needs to be installed.
     pip install cython
     pip install git+https://github.com/SciTools/cartopy.git --no-binary cartopy
     pip install movingpandas
-    pip install rasterio --upgrade
 
-    # This is because of movingpandas depencenies rasterio, cython and cartopy:
-    # (1) rasterio, cython result in unresolved dependencies
-    # (2) cartopy is not PEP 518 compliant
+    # This is because of movingpandas dependency cartopy not being PEP 518 compliant
     # Refer: https://github.com/SciTools/cartopy/issues/1112
 
 
