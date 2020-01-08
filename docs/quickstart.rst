@@ -141,7 +141,10 @@ movingpandas is an optional dependency, but if installed, you can insert TGeomPo
     ).set_index("t")
     geo_df = GeoDataFrame(df)
 
-    traj = mpd.Trajectory(1, geo_df)
+    traj = mpd.Trajectory(geo_df, 1)
+    # Note: In case you are depending on movingpandas 0.1 or lower,
+    # you might need to do mpd.Trajectory(1, geo_df) instead
+
     trip = Trips(car_id=1, trip_id=1, trip=traj,)
     session.add(trip)
     session.commit()
