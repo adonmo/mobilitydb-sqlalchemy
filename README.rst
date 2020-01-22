@@ -17,7 +17,7 @@
 MobilityDB SQLAlchemy
 =====================
 
-This package provides extensions to `SQLAlchemy <http://sqlalchemy.org/>`_ for interacting with `MobilityDB <https://github.com/ULB-CoDE-WIT/MobilityDB>`_. The data retrieved from the database is directly mapped to time index pandas DataFrame objects. TGeomPoint objects can be optionally mapped to movingpandas' Trajectory data structure.
+This package provides extensions to `SQLAlchemy <http://sqlalchemy.org/>`_ for interacting with `MobilityDB <https://github.com/ULB-CoDE-WIT/MobilityDB>`_. The data retrieved from the database is directly mapped to time-indexed pandas DataFrame objects. TGeomPoint objects can be optionally mapped to movingpandas' Trajectory data structure.
 
 Thanks to the amazing work by `MobilityDB <https://github.com/ULB-CoDE-WIT/MobilityDB>`_ and `movingpandas <https://github.com/anitagraser/movingpandas>`_ teams, because of which this project exists.
 
@@ -63,6 +63,10 @@ Contributing
 ============
 
 Issues and pull requests are welcome.
+
+* For proposing new features/improvements or reporting bugs, `create an issue <https://github.com/adonmo/mobilitydb-sqlalchemy/issues/new/choose>`_.
+* Check `open issues <https://github.com/adonmo/mobilitydb-sqlalchemy/issues>`_ for viewing existing ideas, verify if it is already proposed/being worked upon.
+* When implementing new features make sure to add relavant tests and documentation before sending pull requests.
 
 Setup environment
 -----------------
