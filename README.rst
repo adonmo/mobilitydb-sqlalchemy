@@ -1,10 +1,18 @@
 .. image:: https://github.com/adonmo/mobilitydb-sqlalchemy/workflows/Tests/badge.svg
-   :target: https://github.com/adonmo/mobilitydb-sqlalchemy/workflows/Tests/badge.svg
+   :target: https://github.com/adonmo/mobilitydb-sqlalchemy/actions
    :alt: Test Status
 
 .. image:: https://readthedocs.org/projects/mobilitydb-sqlalchemy/badge/?version=latest
    :target: https://mobilitydb-sqlalchemy.readthedocs.io/en/latest/?badge=latest
    :alt: Documentation Status
+
+.. image:: https://img.shields.io/pypi/dm/mobilitydb-sqlalchemy.svg
+   :target: https://pypistats.org/packages/mobilitydb-sqlalchemy
+   :alt: PyPI downloads
+
+.. image:: https://img.shields.io/github/license/adonmo/mobilitydb-sqlalchemy.svg
+   :target: https://github.com/adonmo/mobilitydb-sqlalchemy/blob/master/LICENSE.txt
+   :alt: MIT License
 
 MobilityDB SQLAlchemy
 =====================
