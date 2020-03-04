@@ -63,7 +63,9 @@ Usage
         ),
     ).all()
 
-For more details, read our `documentation <https://mobilitydb-sqlalchemy.readthedocs.io/en/latest/>`_
+There is also a `tutorial <https://anitagraser.com/2020/03/02/movement-data-in-gis-29-power-your-web-apps-with-movement-data-using-mobilitydb-sqlalchemy/>`_ published on Anita Graser's blog.
+
+For more details, read our `documentation <https://mobilitydb-sqlalchemy.readthedocs.io/en/latest/>`_ (specifically, the `quickstart <https://mobilitydb-sqlalchemy.readthedocs.io/en/latest/quickstart.html>`_).
 
 Contributing
 ============
