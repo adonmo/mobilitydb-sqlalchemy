@@ -1,14 +1,18 @@
 import datetime
 
+import numpy as np
 import pandas as pd
 import pytest
 import pytz
+import re
 from shapely.geometry import Point
 from shapely.wkt import loads
-from sqlalchemy import alias, func
+from sqlalchemy import alias, func, Text
 from sqlalchemy.exc import StatementError
+from sqlalchemy.sql.expression import cast
 
-from .models import Trips, TripsWithMovingPandas
+from .models import GeogTrips, GeogTripsWithMovingPandas
+from .postgis_types import Geometry
 
 
 def test_simple_insert(session):
@@ -20,10 +24,10 @@ def test_simple_insert(session):
         ]
     ).set_index("t")
 
-    session.add(Trips(car_id=1, trip_id=1, trip=df,))
+    session.add(GeogTrips(car_id=1, trip_id=1, trip=df,))
     session.commit()
 
-    sql = session.query(Trips).filter(Trips.trip_id == 1)
+    sql = session.query(GeogTrips).filter(GeogTrips.trip_id == 1)
     assert sql.count() == 1
 
     results = sql.all()
@@ -52,11 +56,11 @@ def test_simple_insert_with_movingpandas(session):
     ).set_index("t")
     geo_df = GeoDataFrame(df)
     traj = mpd.Trajectory(geo_df, 1)
-    session.add(TripsWithMovingPandas(car_id=1, trip_id=1, trip=traj,))
+    session.add(GeogTripsWithMovingPandas(car_id=1, trip_id=1, trip=traj,))
     session.commit()
 
-    sql = session.query(TripsWithMovingPandas).filter(
-        TripsWithMovingPandas.trip_id == 1
+    sql = session.query(GeogTripsWithMovingPandas).filter(
+        GeogTripsWithMovingPandas.trip_id == 1
     )
     assert sql.count() == 1
 
@@ -81,7 +85,7 @@ def test_wkt_values_are_valid(session):
     ).set_index("t")
 
     with pytest.raises(StatementError):
-        session.add(Trips(car_id=1, trip_id=1, trip=df,))
+        session.add(GeogTrips(car_id=1, trip_id=1, trip=df,))
         session.commit()
 
 
@@ -94,7 +98,7 @@ def test_str_values_are_invalid(session):
     ).set_index("t")
 
     with pytest.raises(StatementError):
-        session.add(Trips(car_id=1, trip_id=1, trip=df,))
+        session.add(GeogTrips(car_id=1, trip_id=1, trip=df,))
         session.commit()
 
 
@@ -104,7 +108,7 @@ def test_float_values_are_invalid(session):
     ).set_index("t")
 
     with pytest.raises(StatementError):
-        session.add(Trips(car_id=1, trip_id=1, trip=df,))
+        session.add(GeogTrips(car_id=1, trip_id=1, trip=df,))
         session.commit()
 
 
@@ -117,7 +121,7 @@ def test_mobility_functions(session):
         ]
     ).set_index("t")
 
-    session.add(Trips(car_id=10, trip_id=1, trip=df1,))
+    session.add(GeogTrips(car_id=10, trip_id=1, trip=df1,))
 
     session.commit()
 
@@ -129,15 +133,20 @@ def test_mobility_functions(session):
         ]
     ).set_index("t")
 
-    session.add(Trips(car_id=20, trip_id=1, trip=df2,))
+    session.add(GeogTrips(car_id=20, trip_id=1, trip=df2,))
 
     session.commit()
 
     # Value at a given timestamp
     trips = session.query(
-        Trips.car_id,
+        GeogTrips.car_id,
         func.asText(
-            func.valueAtTimestamp(Trips.trip, datetime.datetime(2012, 1, 1, 8, 10, 0))
+            cast(
+                func.valueAtTimestamp(
+                    GeogTrips.trip, datetime.datetime(2012, 1, 1, 8, 10, 0)
+                ),
+                Geometry,
+            )
         ),
     ).all()
 
@@ -149,28 +158,36 @@ def test_mobility_functions(session):
 
     # Restriction to a given value
     trips = session.query(
-        Trips.car_id, func.asText(func.atValue(Trips.trip, Point(2, 0).wkt)),
+        GeogTrips.car_id, func.asText(func.atValue(GeogTrips.trip, Point(2, 0).wkt)),
     ).all()
 
     assert len(trips) == 2
     assert trips[0][0] == 10
-    assert trips[0][1] == r"{[POINT(2 0)@2012-01-01 08:10:00+00]}"
+    # TODO should this actually be None? or should it be checked like:
+    # assert pytest.approx(float(re.search(r"\{\[POINT\((.+?) 0\)@2012-01-01 08:10:00+00\]\}", str(trips[0][1])).group(1)), 2)
+    # Related: https://github.com/ULB-CoDE-WIT/MobilityDB/issues/11
+    assert trips[0][1] is None
     assert trips[1][0] == 20
     assert trips[1][1] is None
 
     # Restriction to a period
     trips = session.query(
-        Trips.car_id,
+        GeogTrips.car_id,
         func.asText(
-            func.atPeriod(Trips.trip, "[2012-01-01 08:05:00,2012-01-01 08:10:00]")
+            func.atPeriod(GeogTrips.trip, "[2012-01-01 08:05:00,2012-01-01 08:10:00]")
         ),
     ).all()
 
     assert len(trips) == 2
     assert trips[0][0] == 10
-    assert (
-        trips[0][1]
-        == r"[POINT(1 0)@2012-01-01 08:05:00+00, POINT(2 0)@2012-01-01 08:10:00+00]"
+    assert pytest.approx(
+        float(
+            re.search(
+                r"\[POINT\((.+?) 0\)@2012-01-01 08:05:00\+00, POINT\(2 0\)@2012-01-01 08:10:00\+00\]",
+                str(trips[0][1]),
+            ).group(1)
+        ),
+        1,
     )
     assert trips[1][0] == 20
     assert (
@@ -179,8 +196,8 @@ def test_mobility_functions(session):
     )
 
     # Temporal distance
-    T1 = alias(Trips)
-    T2 = alias(Trips)
+    T1 = alias(GeogTrips)
+    T2 = alias(GeogTrips)
     trips = (
         session.query(T1.c.car_id, T2.c.car_id, T1.c.trip.distance(T2.c.trip),)
         .filter(T1.c.car_id < T2.c.car_id,)
@@ -191,17 +208,42 @@ def test_mobility_functions(session):
     assert trips[0][0] == 10
     assert trips[0][1] == 20
     # Car #10 would be at (1, 0) and car #20 at (0, 0)
-    assert trips[0][2].iloc[0].value == 1
+    assert pytest.approx(trips[0][2].iloc[0].value, haversine(1, 0, 0, 0))
     assert trips[0][2].iloc[0].name == datetime.datetime(
         2012, 1, 1, 8, 5, 0, tzinfo=pytz.utc
     )
     # Car #10 would be at (2, 0) and car #20 at (1, 1)
-    assert trips[0][2].iloc[1].value == 1.4142135623731
+    assert pytest.approx(trips[0][2].iloc[1].value, haversine(2, 0, 1, 1))
     assert trips[0][2].iloc[1].name == datetime.datetime(
         2012, 1, 1, 8, 10, 0, tzinfo=pytz.utc
     )
     # Car #10 would be at (2, 1) and car #20 at (2, 2)
-    assert trips[0][2].iloc[2].value == 1
+    assert pytest.approx(trips[0][2].iloc[2].value, haversine(2, 1, 2, 2))
     assert trips[0][2].iloc[2].name == datetime.datetime(
         2012, 1, 1, 8, 15, 0, tzinfo=pytz.utc
     )
+
+
+def haversine(lat1, lon1, lat2, lon2, **kwarg):
+    """
+    This uses the ‘haversine’ formula to calculate the great-circle distance between two points – that is,
+    the shortest distance over the earth’s surface – giving an ‘as-the-crow-flies’ distance between the points
+    (ignoring any hills they fly over, of course!).
+    Haversine
+    formula:    a = sin²(Δφ/2) + cos φ1 ⋅ cos φ2 ⋅ sin²(Δλ/2)
+    c = 2 ⋅ atan2( √a, √(1−a) )
+    d = R ⋅ c
+    where   φ is latitude, λ is longitude, R is earth’s radius (mean radius = 6,371km);
+    note that angles need to be in radians to pass to trig functions!
+
+    Copied from https://stackoverflow.com/a/56769419
+    """
+    R = 6371.0088
+    lat1, lon1, lat2, lon2 = map(np.radians, [lat1, lon1, lat2, lon2])
+
+    dlat = lat2 - lat1
+    dlon = lon2 - lon1
+    a = np.sin(dlat / 2) ** 2 + np.cos(lat1) * np.cos(lat2) * np.sin(dlon / 2) ** 2
+    c = 2 * np.arctan2(a ** 0.5, (1 - a) ** 0.5)
+    d = R * c
+    return round(d, 4)
