@@ -24,7 +24,7 @@ if os.path.exists(readme_path):
 setup(
     long_description=readme,
     name='mobilitydb-sqlalchemy',
-    version='0.2.0',
+    version='0.2.1',
     description='MobilityDB extensions to SQLAlchemy',
     python_requires='>=3.7',
     project_urls={"documentation": "https://mobilitydb-sqlalchemy.readthedocs.io/en/latest/", "homepage": "https://github.com/adonmo/mobilitydb-sqlalchemy", "repository": "https://github.com/adonmo/mobilitydb-sqlalchemy"},

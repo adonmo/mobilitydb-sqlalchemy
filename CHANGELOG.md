@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.2.1] - 2020-03-06
+
+- Add support for TGeogPoint
+
 ## [0.2.0] - 2019-12-25
 
 - Add optional support for movingpandas when using TGeomPoint
