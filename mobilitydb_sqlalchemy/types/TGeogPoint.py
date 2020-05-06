@@ -1,5 +1,6 @@
 import re
 
+from pymeos import DeserializerGeom
 from sqlalchemy import func
 from sqlalchemy.types import UserDefinedType
 
@@ -23,6 +24,8 @@ CRS_METRIC = from_epsg(31256)
 
 
 class TGeogPoint(TBaseType):
+    pymeos_deserializer_type = DeserializerGeom
+
     # This is ensure compatibility with movingpandas
     pandas_value_column = "geometry"
 
@@ -48,7 +51,7 @@ class TGeogPoint(TBaseType):
 
     @staticmethod
     def parse_instant_value(value):
-        point = loads(value)
+        point = loads(value.toWKT())
         if type(point) != Point:
             raise TypeError("Expected Point, got: " + type(point))
         return point

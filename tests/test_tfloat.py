@@ -26,10 +26,10 @@ def test_simple_insert(session):
     for result in results:
         assert result.id == 1
         assert result.tdata.size == 4
-        assert result.tdata.iloc[0].value == 0
-        assert result.tdata.iloc[1].value == 8.2
-        assert result.tdata.iloc[2].value == 6.6
-        assert result.tdata.iloc[3].value == 9.1
+        assert result.tdata.iloc[0].value == pytest.approx(0)
+        assert result.tdata.iloc[1].value == pytest.approx(8.2)
+        assert result.tdata.iloc[2].value == pytest.approx(6.6)
+        assert result.tdata.iloc[3].value == pytest.approx(9.1)
 
 
 def test_int_values_are_valid(session):

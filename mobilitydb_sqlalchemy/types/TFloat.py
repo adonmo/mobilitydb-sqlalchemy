@@ -1,5 +1,6 @@
 import pandas as pd
 
+from pymeos import DeserializerFloat
 from sqlalchemy.types import UserDefinedType
 from pandas.api.types import is_numeric_dtype
 
@@ -7,6 +8,8 @@ from .TBaseType import TBaseType
 
 
 class TFloat(TBaseType):
+    pymeos_deserializer_type = DeserializerFloat
+
     def get_col_spec(self):
         return "TFLOAT"
 
@@ -21,7 +24,3 @@ class TFloat(TBaseType):
     @staticmethod
     def write_instant_value(value):
         return str(value)
-
-    @staticmethod
-    def parse_instant_value(value):
-        return float(value)

@@ -1,11 +1,14 @@
 import pandas as pd
 
+from pymeos import DeserializerBool
 from sqlalchemy.types import UserDefinedType
 
 from .TBaseType import TBaseType
 
 
 class TBool(TBaseType):
+    pymeos_deserializer_type = DeserializerBool
+
     def get_col_spec(self):
         return "TBOOL"
 
@@ -20,7 +23,3 @@ class TBool(TBaseType):
     @staticmethod
     def write_instant_value(py_bool):
         return "t" if py_bool else "f"
-
-    @staticmethod
-    def parse_instant_value(valuez):
-        return valuez == "t"

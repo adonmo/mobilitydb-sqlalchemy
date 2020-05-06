@@ -44,6 +44,7 @@ movingpandas = {version = "^0.3rc1", optional = true}
 sphinx = {version = "^2.3.1", optional = true}
 sphinx-rtd-theme = {version = "^0.4.3", optional = true}
 tomlkit = {version = "^0.5.8", optional = true}
+pymeos = {git = "https://github.com/chaitan94/meos"}
 
 [tool.poetry.dev-dependencies]
 dephell = "^0.8.3"

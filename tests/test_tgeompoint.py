@@ -1,5 +1,7 @@
 import datetime
+import math
 
+import numpy as np
 import pandas as pd
 import pytest
 import pytz
@@ -9,6 +11,18 @@ from sqlalchemy import alias, func
 from sqlalchemy.exc import StatementError
 
 from .models import Trips, TripsWithMovingPandas
+
+
+def setup_module(module):
+    from pymeos import initGEOS
+
+    initGEOS()
+
+
+def teardown_module(module):
+    from pymeos import finishGEOS
+
+    finishGEOS()
 
 
 def test_simple_insert(session):
@@ -189,21 +203,24 @@ def test_mobility_functions(session):
         .all()
     )
 
+    def epoch(year, month, day, hour=0, minute=0):
+        return int(
+            datetime.datetime(year, month, day, hour, minute)
+            .replace(tzinfo=pytz.UTC)
+            .timestamp()
+            * 1000
+        )
+
     assert len(trips) == 1
     assert trips[0][0] == 10
     assert trips[0][1] == 20
+    trips[0][2].index = trips[0][2].index.astype(np.int64)
     # Car #10 would be at (1, 0) and car #20 at (0, 0)
     assert trips[0][2].iloc[0].value == 1
-    assert trips[0][2].iloc[0].name == datetime.datetime(
-        2012, 1, 1, 8, 5, 0, tzinfo=pytz.utc
-    )
+    assert trips[0][2].iloc[0].name == epoch(2012, 1, 1, 8, 5)
     # Car #10 would be at (2, 0) and car #20 at (1, 1)
-    assert trips[0][2].iloc[1].value == 1.4142135623731
-    assert trips[0][2].iloc[1].name == datetime.datetime(
-        2012, 1, 1, 8, 10, 0, tzinfo=pytz.utc
-    )
+    assert trips[0][2].iloc[1].value == pytest.approx(math.sqrt(2))
+    assert trips[0][2].iloc[1].name == epoch(2012, 1, 1, 8, 10)
     # Car #10 would be at (2, 1) and car #20 at (2, 2)
     assert trips[0][2].iloc[2].value == 1
-    assert trips[0][2].iloc[2].name == datetime.datetime(
-        2012, 1, 1, 8, 15, 0, tzinfo=pytz.utc
-    )
+    assert trips[0][2].iloc[2].name == epoch(2012, 1, 1, 8, 15)

@@ -1,11 +1,17 @@
 import pandas as pd
 
+from pymeos import DeserializerInt, SerializerInt, TInstantInt, TSequenceInt
 from sqlalchemy.types import UserDefinedType
 
 from .TBaseType import TBaseType
 
 
 class TInt(TBaseType):
+    pymeos_sequence_type = TSequenceInt
+    pymeos_instant_type = TInstantInt
+    pymeos_deserializer_type = DeserializerInt
+    pymeos_serializer_type = SerializerInt
+
     def get_col_spec(self):
         return "TINT"
 
@@ -20,7 +26,3 @@ class TInt(TBaseType):
     @staticmethod
     def write_instant_value(value):
         return str(value)
-
-    @staticmethod
-    def parse_instant_value(value):
-        return int(value)

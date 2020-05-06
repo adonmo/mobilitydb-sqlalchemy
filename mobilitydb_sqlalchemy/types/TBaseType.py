@@ -1,6 +1,7 @@
 import pandas as pd
 
 from sqlalchemy.types import UserDefinedType
+
 from mobilitydb_sqlalchemy.comparator import Comparator
 
 
@@ -11,11 +12,16 @@ class TBaseType(UserDefinedType):
     for the common temporal nature of these types.
 
     Children of this class are expected to implement the functions `validate_type`,
-    `write_instant_value` and `parse_instant_value`.
+    `write_instant_value`, `parse_instant_value` and the properties `pymeos_*_type`
+    must be set accordingly.
     """
 
     pandas_value_column = "value"
     comparator_factory = Comparator
+
+    @property
+    def pymeos_deserializer_type(self):
+        raise NotImplementedError()
 
     @staticmethod
     def validate_type(value):
@@ -27,7 +33,7 @@ class TBaseType(UserDefinedType):
 
     @staticmethod
     def parse_instant_value(value):
-        raise NotImplementedError()
+        return value
 
     def __init__(self, left_closed=True, right_closed=True):
         self.left_closed = left_closed
@@ -56,14 +62,16 @@ class TBaseType(UserDefinedType):
 
     def result_processor(self, dialect, coltype):
         def process(value):
-            instants = [i.strip().split("@") for i in value[1:-1].split(",")]
+            tseq = self.pymeos_deserializer_type(value).nextTSequence()
             df = pd.DataFrame(
                 [
                     {
-                        self.pandas_value_column: self.parse_instant_value(i[0]),
-                        "t": i[1],
+                        self.pandas_value_column: self.parse_instant_value(
+                            i.getValue()
+                        ),
+                        "t": i.getT(),
                     }
-                    for i in instants
+                    for i in tseq.getInstants()
                 ]
             )
             df["t"] = pd.to_datetime(df["t"])
