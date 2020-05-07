@@ -1,6 +1,6 @@
 import pandas as pd
 
-from pymeos import DeserializerFloat
+from pymeos import DeserializerFloat, SerializerFloat, TInstantFloat, TSequenceFloat
 from sqlalchemy.types import UserDefinedType
 from pandas.api.types import is_numeric_dtype
 
@@ -8,7 +8,10 @@ from .TBaseType import TBaseType
 
 
 class TFloat(TBaseType):
+    pymeos_sequence_type = TSequenceFloat
+    pymeos_instant_type = TInstantFloat
     pymeos_deserializer_type = DeserializerFloat
+    pymeos_serializer_type = SerializerFloat
 
     def get_col_spec(self):
         return "TFLOAT"
@@ -20,7 +23,3 @@ class TFloat(TBaseType):
             raise TypeError(
                 "TInt needs int values. Got: {} Expected {}".format(dtypes.kind, "f")
             )
-
-    @staticmethod
-    def write_instant_value(value):
-        return str(value)

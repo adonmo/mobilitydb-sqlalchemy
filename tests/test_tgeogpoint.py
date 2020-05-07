@@ -12,6 +12,7 @@ from sqlalchemy import alias, func, Text
 from sqlalchemy.exc import StatementError
 from sqlalchemy.sql.expression import cast
 
+from mobilitydb_sqlalchemy.utils import epoch
 from .models import GeogTrips, GeogTripsWithMovingPandas
 from .postgis_types import Geometry
 
@@ -215,14 +216,6 @@ def test_mobility_functions(session):
         .filter(T1.c.car_id < T2.c.car_id,)
         .all()
     )
-
-    def epoch(year, month, day, hour=0, minute=0):
-        return int(
-            datetime.datetime(year, month, day, hour, minute)
-            .replace(tzinfo=pytz.UTC)
-            .timestamp()
-            * 1000
-        )
 
     assert len(trips) == 1
     assert trips[0][0] == 10

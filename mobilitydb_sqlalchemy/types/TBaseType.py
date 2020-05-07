@@ -20,7 +20,19 @@ class TBaseType(UserDefinedType):
     comparator_factory = Comparator
 
     @property
+    def pymeos_sequence_type(self):
+        raise NotImplementedError()
+
+    @property
+    def pymeos_instant_type(self):
+        raise NotImplementedError()
+
+    @property
     def pymeos_deserializer_type(self):
+        raise NotImplementedError()
+
+    @property
+    def pymeos_serializer_type(self):
         raise NotImplementedError()
 
     @staticmethod
@@ -29,7 +41,7 @@ class TBaseType(UserDefinedType):
 
     @staticmethod
     def write_instant_value(value):
-        raise NotImplementedError()
+        return value
 
     @staticmethod
     def parse_instant_value(value):
@@ -43,20 +55,21 @@ class TBaseType(UserDefinedType):
         def process(value):
             self.validate_type(value)
             value.sort_index(inplace=True)
-            instants = list(value.loc[v] for v in value.index)
-            left_bound = "[" if self.left_closed else "("
-            right_bound = "]" if self.right_closed else ")"
-            return "{}{}{}".format(
-                left_bound,
-                ", ".join(
-                    "{}@{}".format(
-                        self.write_instant_value(getattr(i, self.pandas_value_column)),
-                        i.name,
-                    )
-                    for i in instants
-                ),
-                right_bound,
+
+            serializer = self.pymeos_serializer_type()
+            instants = list(
+                self.pymeos_instant_type(
+                    self.write_instant_value(
+                        getattr(value.loc[v], self.pandas_value_column)
+                    ),
+                    int(v.timestamp() * 1000),
+                )
+                for v in value.index
             )
+            sequence = self.pymeos_sequence_type(
+                instants, not self.left_closed, not self.right_closed
+            )
+            return serializer.write(sequence)
 
         return process
 

@@ -1,13 +1,16 @@
 import pandas as pd
 
-from pymeos import DeserializerBool
+from pymeos import DeserializerBool, SerializerBool, TInstantBool, TSequenceBool
 from sqlalchemy.types import UserDefinedType
 
 from .TBaseType import TBaseType
 
 
 class TBool(TBaseType):
+    pymeos_sequence_type = TSequenceBool
+    pymeos_instant_type = TInstantBool
     pymeos_deserializer_type = DeserializerBool
+    pymeos_serializer_type = SerializerBool
 
     def get_col_spec(self):
         return "TBOOL"
@@ -19,7 +22,3 @@ class TBool(TBaseType):
             raise TypeError(
                 "TBool needs bool values. Got: {} Expected {}".format(dtype_kind, "b")
             )
-
-    @staticmethod
-    def write_instant_value(py_bool):
-        return "t" if py_bool else "f"

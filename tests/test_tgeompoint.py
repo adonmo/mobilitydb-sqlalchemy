@@ -10,6 +10,7 @@ from shapely.wkt import loads
 from sqlalchemy import alias, func
 from sqlalchemy.exc import StatementError
 
+from mobilitydb_sqlalchemy.utils import epoch
 from .models import Trips, TripsWithMovingPandas
 
 
@@ -202,14 +203,6 @@ def test_mobility_functions(session):
         .filter(T1.c.car_id < T2.c.car_id,)
         .all()
     )
-
-    def epoch(year, month, day, hour=0, minute=0):
-        return int(
-            datetime.datetime(year, month, day, hour, minute)
-            .replace(tzinfo=pytz.UTC)
-            .timestamp()
-            * 1000
-        )
 
     assert len(trips) == 1
     assert trips[0][0] == 10

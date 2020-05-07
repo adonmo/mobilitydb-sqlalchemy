@@ -22,7 +22,3 @@ class TInt(TBaseType):
             raise TypeError(
                 "TInt needs int values. Got: {} Expected {}".format(dtype_kind, "i")
             )
-
-    @staticmethod
-    def write_instant_value(value):
-        return str(value)

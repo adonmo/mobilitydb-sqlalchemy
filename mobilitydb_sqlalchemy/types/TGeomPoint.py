@@ -1,6 +1,12 @@
 import re
 
-from pymeos import DeserializerGeom
+from pymeos import (
+    DeserializerGeom,
+    Geometry,
+    SerializerGeom,
+    TInstantGeom,
+    TSequenceGeom,
+)
 from sqlalchemy import func
 from sqlalchemy.types import UserDefinedType
 
@@ -24,7 +30,10 @@ CRS_METRIC = from_epsg(31256)
 
 
 class TGeomPoint(TBaseType):
+    pymeos_sequence_type = TSequenceGeom
+    pymeos_instant_type = TInstantGeom
     pymeos_deserializer_type = DeserializerGeom
+    pymeos_serializer_type = SerializerGeom
 
     # This is ensure compatibility with movingpandas
     pandas_value_column = "geometry"
@@ -47,7 +56,7 @@ class TGeomPoint(TBaseType):
 
     @staticmethod
     def write_instant_value(value):
-        return value.wkt
+        return Geometry(value.wkt)
 
     @staticmethod
     def parse_instant_value(value):
