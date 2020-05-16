@@ -14,18 +14,6 @@ from mobilitydb_sqlalchemy.utils import epoch
 from .models import Trips, TripsWithMovingPandas
 
 
-def setup_module(module):
-    from pymeos import initGEOS
-
-    initGEOS()
-
-
-def teardown_module(module):
-    from pymeos import finishGEOS
-
-    finishGEOS()
-
-
 def test_simple_insert(session):
     df = pd.DataFrame(
         [

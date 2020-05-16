@@ -17,18 +17,6 @@ from .models import GeogTrips, GeogTripsWithMovingPandas
 from .postgis_types import Geometry
 
 
-def setup_module(module):
-    from pymeos import initGEOS
-
-    initGEOS()
-
-
-def teardown_module(module):
-    from pymeos import finishGEOS
-
-    finishGEOS()
-
-
 def test_simple_insert(session):
     df = pd.DataFrame(
         [
