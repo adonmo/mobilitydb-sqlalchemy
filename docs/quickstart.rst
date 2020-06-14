@@ -122,6 +122,8 @@ movingpandas is an optional dependency, but if installed, you can insert TGeomPo
 
     from mobilitydb_sqlalchemy import TGeomPoint
     from shapely.geometry import Point
+    from fiona.crs import from_epsg
+    CRS_METRIC = from_epsg(31256)
 
     class Trips(Base):
         __tablename__ = "trips_test_001"
@@ -139,7 +141,7 @@ movingpandas is an optional dependency, but if installed, you can insert TGeomPo
             {"geometry": Point(2, -1.9), "t": datetime.datetime(2012, 1, 1, 8, 15, 0),},
         ]
     ).set_index("t")
-    geo_df = GeoDataFrame(df)
+    geo_df = GeoDataFrame(df, crs=CRS_METRIC)
 
     traj = mpd.Trajectory(geo_df, 1)
     # Note: In case you are depending on movingpandas 0.1 or lower,

@@ -6,6 +6,7 @@ from sqlalchemy.types import UserDefinedType
 import pandas as pd
 from shapely.geometry import Point
 from shapely.wkt import loads
+from fiona.crs import from_epsg
 
 from .TBaseType import TBaseType
 
@@ -16,6 +17,9 @@ try:
     MOVING_PANDAS = True
 except ImportError:
     MOVING_PANDAS = False
+
+
+CRS_METRIC = from_epsg(31256)
 
 
 class TGeomPoint(TBaseType):
@@ -73,7 +77,7 @@ class TGeomPoint(TBaseType):
             df = parent_process(value)
             if use_movingpandas:
                 if MOVING_PANDAS:
-                    geo_df = GeoDataFrame(df)
+                    geo_df = GeoDataFrame(df, crs=CRS_METRIC)
                     traj = mpd.Trajectory(geo_df, 1)
                     return traj
                 else:

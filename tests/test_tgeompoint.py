@@ -39,6 +39,8 @@ def test_simple_insert(session):
 def test_simple_insert_with_movingpandas(session):
     import movingpandas as mpd
     from geopandas import GeoDataFrame
+    from fiona.crs import from_epsg
+    CRS_METRIC = from_epsg(31256)
 
     df = pd.DataFrame(
         [
@@ -50,7 +52,7 @@ def test_simple_insert_with_movingpandas(session):
             },
         ]
     ).set_index("t")
-    geo_df = GeoDataFrame(df)
+    geo_df = GeoDataFrame(df, crs=CRS_METRIC)
     traj = mpd.Trajectory(geo_df, 1)
     session.add(TripsWithMovingPandas(car_id=1, trip_id=1, trip=traj,))
     session.commit()
