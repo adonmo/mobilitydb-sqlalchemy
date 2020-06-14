@@ -163,10 +163,7 @@ def test_mobility_functions(session):
 
     assert len(trips) == 2
     assert trips[0][0] == 10
-    # TODO should this actually be None? or should it be checked like:
-    # assert pytest.approx(float(re.search(r"\{\[POINT\((.+?) 0\)@2012-01-01 08:10:00+00\]\}", str(trips[0][1])).group(1)), 2)
-    # Related: https://github.com/ULB-CoDE-WIT/MobilityDB/issues/11
-    assert trips[0][1] is None
+    assert trips[0][1] == r"{[POINT(2 0)@2012-01-01 08:10:00+00]}"
     assert trips[1][0] == 20
     assert trips[1][1] is None
 
