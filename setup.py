@@ -36,6 +36,6 @@ setup(
     packages=['mobilitydb_sqlalchemy', 'mobilitydb_sqlalchemy.types'],
     package_dir={"": "."},
     package_data={},
-    install_requires=['geoalchemy2==0.*,>=0.6.3', 'pandas==0.*,>=0.25.3', 'shapely==1.*,>=1.6.4', 'sqlalchemy==1.*,>=1.3.11'],
-    extras_require={"dev": ["black==19.*,>=19.10.0", "dephell==0.*,>=0.7.9", "fissix==19.*,>=19.2.0", "pre-commit==1.*,>=1.20.0", "psycopg2==2.*,>=2.8.4", "pytest==5.*,>=5.3.2"], "docs": ["sphinx==2.*,>=2.3.1", "sphinx-rtd-theme==0.*,>=0.4.3", "tomlkit==0.*,>=0.5.8"], "movingpandas": ["movingpandas==0.*,>=0.1.0"]},
+    install_requires=['geoalchemy2==0.*,>=0.8.4', 'pandas==1.*,>=1.0.4', 'shapely==1.*,>=1.7.0', 'sqlalchemy==1.*,>=1.3.17'],
+    extras_require={"dev": ["black==19.*,>=19.10.0.b0", "dephell==0.*,>=0.8.3", "fissix==19.*,>=19.2.0.b1", "pre-commit==2.*,>=2.5.1", "psycopg2==2.*,>=2.8.4", "pytest==5.*,>=5.4.3"], "docs": ["sphinx==2.*,>=2.3.1", "sphinx-rtd-theme==0.*,>=0.4.3", "tomlkit==0.*,>=0.5.8"], "movingpandas": ["movingpandas==0.*,>=0.3.0.rc1"]},
 )
