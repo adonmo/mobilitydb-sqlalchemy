@@ -67,7 +67,7 @@ class TBaseType(UserDefinedType):
                 for v in value.index
             )
             sequence = self.pymeos_sequence_type(
-                instants, not self.left_closed, not self.right_closed
+                instants, self.left_closed, self.right_closed
             )
             return serializer.write(sequence)
 
@@ -82,7 +82,7 @@ class TBaseType(UserDefinedType):
                         self.pandas_value_column: self.parse_instant_value(
                             i.getValue()
                         ),
-                        "t": i.getT(),
+                        "t": i.getTimestamp(),
                     }
                     for i in tseq.getInstants()
                 ]
