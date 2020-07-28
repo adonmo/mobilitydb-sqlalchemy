@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.3] - 2020-07-28
+
+- The library now works on top of [PyMEOS](https://github.com/adonmo/meos)
+
 ## [0.2.1] - 2020-03-06
 
 - Add support for TGeogPoint
