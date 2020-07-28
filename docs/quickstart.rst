@@ -261,17 +261,7 @@ For this the optional dependency "movingpandas" needs to be installed.
 
 .. code-block:: sh
 
-    # Currently installing the optional dependency of movingpandas
-    # using `poetry install -E movingpandas` doesn't work
-
-    # To get movingpandas use pip instead of poetry, run the following (in exact order):
-    poetry shell
-    pip install cython
-    pip install git+https://github.com/SciTools/cartopy.git --no-binary cartopy
-    pip install movingpandas
-
-    # This is because of movingpandas dependency cartopy not being PEP 518 compliant
-    # Refer: https://github.com/SciTools/cartopy/issues/1112
+    poetry install -E movingpandas
 
 
 After this, movingpandas can be enabled with a flag on the TGeomPoint column

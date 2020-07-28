@@ -27,11 +27,17 @@ def test_simple_insert(session):
         assert result.id == 1
         assert result.tdata.size == 3
         assert result.tdata.iloc[0].value == False
-        assert result.tdata.iloc[0].name == datetime.datetime(2018, 1, 1, 12, 0, tzinfo=datetime.timezone.utc)
+        assert result.tdata.iloc[0].name == datetime.datetime(
+            2018, 1, 1, 12, 0, tzinfo=datetime.timezone.utc
+        )
         assert result.tdata.iloc[1].value == True
-        assert result.tdata.iloc[1].name == datetime.datetime(2018, 1, 1, 12, 6, tzinfo=datetime.timezone.utc)
+        assert result.tdata.iloc[1].name == datetime.datetime(
+            2018, 1, 1, 12, 6, tzinfo=datetime.timezone.utc
+        )
         assert result.tdata.iloc[2].value == False
-        assert result.tdata.iloc[2].name == datetime.datetime(2018, 1, 1, 12, 15, tzinfo=datetime.timezone.utc)
+        assert result.tdata.iloc[2].name == datetime.datetime(
+            2018, 1, 1, 12, 15, tzinfo=datetime.timezone.utc
+        )
 
 
 def test_float_values_are_invalid(session):

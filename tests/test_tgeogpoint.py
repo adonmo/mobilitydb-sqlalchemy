@@ -46,6 +46,7 @@ def test_simple_insert_with_movingpandas(session):
     import movingpandas as mpd
     from geopandas import GeoDataFrame
     from fiona.crs import from_epsg
+
     CRS_METRIC = from_epsg(31256)
 
     df = pd.DataFrame(
@@ -210,13 +211,19 @@ def test_mobility_functions(session):
     assert trips[0][1] == 20
     # Car #10 would be at (1, 0) and car #20 at (0, 0)
     assert pytest.approx(trips[0][2].iloc[0].value, haversine(1, 0, 0, 0))
-    assert trips[0][2].iloc[0].name == datetime.datetime(2012, 1, 1, 8, 5, tzinfo=datetime.timezone.utc)
+    assert trips[0][2].iloc[0].name == datetime.datetime(
+        2012, 1, 1, 8, 5, tzinfo=datetime.timezone.utc
+    )
     # Car #10 would be at (2, 0) and car #20 at (1, 1)
     assert pytest.approx(trips[0][2].iloc[1].value, haversine(2, 0, 1, 1))
-    assert trips[0][2].iloc[1].name == datetime.datetime(2012, 1, 1, 8, 10, tzinfo=datetime.timezone.utc)
+    assert trips[0][2].iloc[1].name == datetime.datetime(
+        2012, 1, 1, 8, 10, tzinfo=datetime.timezone.utc
+    )
     # Car #10 would be at (2, 1) and car #20 at (2, 2)
     assert pytest.approx(trips[0][2].iloc[2].value, haversine(2, 1, 2, 2))
-    assert trips[0][2].iloc[2].name == datetime.datetime(2012, 1, 1, 8, 15, tzinfo=datetime.timezone.utc)
+    assert trips[0][2].iloc[2].name == datetime.datetime(
+        2012, 1, 1, 8, 15, tzinfo=datetime.timezone.utc
+    )
 
 
 def haversine(lat1, lon1, lat2, lon2, **kwarg):

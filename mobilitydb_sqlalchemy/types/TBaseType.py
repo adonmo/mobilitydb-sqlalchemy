@@ -74,9 +74,7 @@ class TBaseType(UserDefinedType):
             df = pd.DataFrame(
                 [
                     {
-                        self.pandas_value_column: self.parse_instant_value(
-                            i.getValue
-                        ),
+                        self.pandas_value_column: self.parse_instant_value(i.getValue),
                         "t": i.getTimestamp,
                     }
                     for i in sorted(tseq.instants)

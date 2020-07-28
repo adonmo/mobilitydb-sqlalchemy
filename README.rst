@@ -112,19 +112,7 @@ movingpandas is an optional dependency - but to run tests you would need it. So 
 
 .. code-block:: sh
 
-    # Currently installing the optional dependency of movingpandas
-    # using `poetry install -E movingpandas` doesn't work
-
-    # To get movingpandas use pip instead of poetry, run the following (in exact order):
-    poetry shell
-    pip install --upgrade pip
-    pip install cython
-    pip install git+https://github.com/SciTools/cartopy.git --no-binary cartopy
-    pip install movingpandas
-    pip install --upgrade bokeh
-
-    # This is because of movingpandas dependency cartopy not being PEP 518 compliant
-    # Refer: https://github.com/SciTools/cartopy/issues/1112
+    poetry install -E movingpandas
 
 Now, you can actually run the tests using:
 
