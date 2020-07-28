@@ -21,6 +21,8 @@ This package provides extensions to `SQLAlchemy <http://sqlalchemy.org/>`_ for i
 
 Thanks to the amazing work by `MobilityDB <https://github.com/ULB-CoDE-WIT/MobilityDB>`_ and `movingpandas <https://github.com/anitagraser/movingpandas>`_ teams, because of which this project exists.
 
+This project is built using `PyMEOS <https://github.com/adonmo/meos>`_
+
 A demo webapp built using this library is now available online:
 
 **Live Demo**: https://mobilitydb-sqlalchemy-demo.adonmo.com

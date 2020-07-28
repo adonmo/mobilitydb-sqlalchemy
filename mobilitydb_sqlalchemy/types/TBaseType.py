@@ -31,10 +31,6 @@ class TBaseType(UserDefinedType):
     def pymeos_deserializer_type(self):
         raise NotImplementedError()
 
-    @property
-    def pymeos_serializer_type(self):
-        raise NotImplementedError()
-
     @staticmethod
     def validate_type(value):
         raise NotImplementedError()
@@ -56,20 +52,19 @@ class TBaseType(UserDefinedType):
             self.validate_type(value)
             value.sort_index(inplace=True)
 
-            serializer = self.pymeos_serializer_type()
-            instants = list(
+            instants = {
                 self.pymeos_instant_type(
                     self.write_instant_value(
                         getattr(value.loc[v], self.pandas_value_column)
                     ),
-                    int(v.timestamp() * 1000),
+                    v,
                 )
                 for v in value.index
-            )
+            }
             sequence = self.pymeos_sequence_type(
                 instants, self.left_closed, self.right_closed
             )
-            return serializer.write(sequence)
+            return str(sequence)
 
         return process
 
@@ -80,11 +75,11 @@ class TBaseType(UserDefinedType):
                 [
                     {
                         self.pandas_value_column: self.parse_instant_value(
-                            i.getValue()
+                            i.getValue
                         ),
-                        "t": i.getTimestamp(),
+                        "t": i.getTimestamp,
                     }
-                    for i in tseq.getInstants()
+                    for i in sorted(tseq.instants)
                 ]
             )
             df["t"] = pd.to_datetime(df["t"])

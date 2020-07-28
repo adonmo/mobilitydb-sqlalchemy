@@ -1,18 +1,14 @@
 import re
 
-from pymeos import (
-    DeserializerGeom,
-    Geometry,
-    SerializerGeom,
-    TInstantGeom,
-    TSequenceGeom,
-)
+import pandas as pd
+from pymeos import Geometry
+from pymeos.io import DeserializerGeom
+from pymeos.temporal import TInstantGeom, TSequenceGeom
+from shapely.geometry import Point
+from shapely.wkt import loads
 from sqlalchemy import func
 from sqlalchemy.types import UserDefinedType
 
-import pandas as pd
-from shapely.geometry import Point
-from shapely.wkt import loads
 from fiona.crs import from_epsg
 
 from .TBaseType import TBaseType
@@ -33,7 +29,6 @@ class TBaseGeomPoint(TBaseType):
     pymeos_sequence_type = TSequenceGeom
     pymeos_instant_type = TInstantGeom
     pymeos_deserializer_type = DeserializerGeom
-    pymeos_serializer_type = SerializerGeom
 
     # This is ensure compatibility with movingpandas
     pandas_value_column = "geometry"

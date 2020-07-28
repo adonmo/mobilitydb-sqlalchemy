@@ -1,6 +1,7 @@
 import pandas as pd
 
-from pymeos import DeserializerFloat, SerializerFloat, TInstantFloat, TSequenceFloat
+from pymeos.io import DeserializerFloat
+from pymeos.temporal import TInstantFloat, TSequenceFloat
 from sqlalchemy.types import UserDefinedType
 from pandas.api.types import is_numeric_dtype
 
@@ -11,7 +12,6 @@ class TFloat(TBaseType):
     pymeos_sequence_type = TSequenceFloat
     pymeos_instant_type = TInstantFloat
     pymeos_deserializer_type = DeserializerFloat
-    pymeos_serializer_type = SerializerFloat
 
     def get_col_spec(self):
         return "TFLOAT"
