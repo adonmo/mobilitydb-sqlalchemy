@@ -1,15 +1,15 @@
 import pandas as pd
 
 from pymeos.io import DeserializerBool
-from pymeos.temporal import TInstantBool, TSequenceBool
+from pymeos.temporal import TBoolInst, TBoolSeq
 from sqlalchemy.types import UserDefinedType
 
 from .TBaseType import TBaseType
 
 
 class TBool(TBaseType):
-    pymeos_sequence_type = TSequenceBool
-    pymeos_instant_type = TInstantBool
+    pymeos_sequence_type = TBoolSeq
+    pymeos_instant_type = TBoolInst
     pymeos_deserializer_type = DeserializerBool
 
     def get_col_spec(self):

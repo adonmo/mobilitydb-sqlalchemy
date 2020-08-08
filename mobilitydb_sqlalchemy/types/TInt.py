@@ -1,15 +1,15 @@
 import pandas as pd
 
 from pymeos.io import DeserializerInt
-from pymeos.temporal import TInstantInt, TSequenceInt
+from pymeos.temporal import TIntInst, TIntSeq
 from sqlalchemy.types import UserDefinedType
 
 from .TBaseType import TBaseType
 
 
 class TInt(TBaseType):
-    pymeos_sequence_type = TSequenceInt
-    pymeos_instant_type = TInstantInt
+    pymeos_sequence_type = TIntSeq
+    pymeos_instant_type = TIntInst
     pymeos_deserializer_type = DeserializerInt
 
     def get_col_spec(self):

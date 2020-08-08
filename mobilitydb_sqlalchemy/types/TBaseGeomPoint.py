@@ -1,9 +1,9 @@
 import re
 
 import pandas as pd
-from pymeos import Geometry
+from pymeos import GeomPoint
 from pymeos.io import DeserializerGeom
-from pymeos.temporal import TInstantGeom, TSequenceGeom
+from pymeos.temporal import TGeomPointInst, TGeomPointSeq
 from shapely.geometry import Point
 from shapely.wkt import loads
 from sqlalchemy import func
@@ -26,8 +26,8 @@ CRS_METRIC = from_epsg(31256)
 
 
 class TBaseGeomPoint(TBaseType):
-    pymeos_sequence_type = TSequenceGeom
-    pymeos_instant_type = TInstantGeom
+    pymeos_sequence_type = TGeomPointSeq
+    pymeos_instant_type = TGeomPointInst
     pymeos_deserializer_type = DeserializerGeom
 
     # This is ensure compatibility with movingpandas
@@ -51,7 +51,7 @@ class TBaseGeomPoint(TBaseType):
 
     @staticmethod
     def write_instant_value(value):
-        return Geometry(value.wkt)
+        return GeomPoint(value.wkt)
 
     @staticmethod
     def parse_instant_value(value):

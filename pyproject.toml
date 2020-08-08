@@ -36,22 +36,22 @@ documentation = "https://mobilitydb-sqlalchemy.readthedocs.io/en/latest/"
 
 [tool.poetry.dependencies]
 python = ">=3.7"
-pandas = "^1.0.4"
-sqlalchemy = "^1.3.17"
+pandas = "^1.1.0"
+sqlalchemy = "^1.3.18"
 geoalchemy2 = "^0.8.4"
-shapely = "^1.7a3"
-movingpandas = {git = "https://github.com/anitagraser/movingpandas", optional = true}
+shapely = "^1.7.0"
+movingpandas = {git = "https://github.com/anitagraser/movingpandas", rev = "f1f56f263ab088ae6d1c6af9a181c0a8ea3d7ab4", optional = true}
 sphinx = {version = "^2.3.1", optional = true}
 sphinx-rtd-theme = {version = "^0.4.3", optional = true}
 tomlkit = {version = "^0.5.8", optional = true}
-pymeos = "^0.0.9"
+pymeos = "^0.1"
 
 [tool.poetry.dev-dependencies]
 dephell = "^0.8.3"
-fissix = "^19.2b1"
-pytest = "^5.4.3"
-psycopg2 = "^2.8.4"
-pre-commit = "^2.5.1"
+fissix = "^20.5.1"
+pytest = "^6.0.1"
+psycopg2 = "^2.8.5"
+pre-commit = "^2.6.0"
 black = "^19.10b0"
 
 [tool.poetry.extras]
