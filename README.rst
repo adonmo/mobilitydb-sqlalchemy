@@ -6,8 +6,8 @@
    :target: https://mobilitydb-sqlalchemy.readthedocs.io/en/latest/?badge=latest
    :alt: Documentation Status
 
-.. image:: https://img.shields.io/pypi/dm/mobilitydb-sqlalchemy.svg
-   :target: https://pypistats.org/packages/mobilitydb-sqlalchemy
+.. image:: https://pepy.tech/badge/mobilitydb-sqlalchemy
+   :target: https://pepy.tech/project/mobilitydb-sqlalchemy
    :alt: PyPI downloads
 
 .. image:: https://img.shields.io/github/license/adonmo/mobilitydb-sqlalchemy.svg
