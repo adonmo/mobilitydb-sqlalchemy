@@ -30,5 +30,5 @@ class Period(UserDefinedType):
 
     def result_processor(self, dialect, coltype):
         def process(value):
-            return(value)
+            return MEOSPeriod(value)
         return process
