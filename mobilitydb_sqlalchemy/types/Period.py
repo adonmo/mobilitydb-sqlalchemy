@@ -8,7 +8,7 @@ from .TBaseType import TBaseType
 def period_ident(self,t):
     return(t)
 
-class Period(TBaseType):
+class Period(UserDefinedType):
     pymeos_instant_type = TText
     pymeos_deserializer_type = period_ident
 
