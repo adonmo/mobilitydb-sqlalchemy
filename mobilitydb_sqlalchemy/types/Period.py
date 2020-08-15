@@ -1,6 +1,7 @@
 import pandas as pd
 
 from pymeos.temporal import TText
+from pymeos.time import Period as MEOSPeriod
 from sqlalchemy.types import UserDefinedType
 
 from .TBaseType import TBaseType
