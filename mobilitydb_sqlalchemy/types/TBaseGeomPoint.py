@@ -9,20 +9,17 @@ from shapely.wkt import loads
 from sqlalchemy import func
 from sqlalchemy.types import UserDefinedType
 
-from fiona.crs import from_epsg
-
 from .TBaseType import TBaseType
 
 try:
     import movingpandas as mpd
+    from fiona.crs import from_epsg
     from geopandas import GeoDataFrame
 
     MOVING_PANDAS = True
+    CRS_METRIC = from_epsg(31256)
 except ImportError:
     MOVING_PANDAS = False
-
-
-CRS_METRIC = from_epsg(31256)
 
 
 class TBaseGeomPoint(TBaseType):
