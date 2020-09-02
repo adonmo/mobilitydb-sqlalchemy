@@ -16,6 +16,7 @@ from mobilitydb_sqlalchemy import (
     TGeogPoint,
     TFloat,
     TInt,
+    TimestampSet,
 )
 
 Base = declarative_base()
@@ -31,6 +32,12 @@ class PeriodSets(Base):
     __tablename__ = "periodset_test_001"
     id = Column(Integer, primary_key=True)
     periodset = Column(PeriodSet)
+
+
+class TimestampSets(Base):
+    __tablename__ = "timestampset_test_001"
+    id = Column(Integer, primary_key=True)
+    timestampset = Column(TimestampSet)
 
 
 class TemporalBools(Base):

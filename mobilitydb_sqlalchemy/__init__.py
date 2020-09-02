@@ -5,3 +5,4 @@ from .types.TFloat import TFloat
 from .types.TInt import TInt
 from .types.Period import Period
 from .types.PeriodSet import PeriodSet
+from .types.TimestampSet import TimestampSet
