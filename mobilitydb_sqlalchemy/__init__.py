@@ -1,5 +1,6 @@
 # Box Types
 from .types.TBox import TBox
+from .types.STBox import STBox
 
 # Time Types
 from .types.Period import Period
