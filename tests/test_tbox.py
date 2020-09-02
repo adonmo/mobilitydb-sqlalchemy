@@ -1,37 +1,37 @@
 import datetime
 import pytest
-from pymeos.time import Period
+from pymeos.box import TBox
 from sqlalchemy.exc import StatementError
 
-from .models import Periods
+from .models import TBoxes
 
 
 def test_simple_insert(session):
-    period = Period(
+    tbox = TBox(
         datetime.datetime(2018, 1, 1, tzinfo=datetime.timezone.utc),
         datetime.datetime(2018, 1, 2, tzinfo=datetime.timezone.utc),
     )
 
-    session.add(Periods(period=period))
+    session.add(TBoxes(tbox=tbox))
     session.commit()
 
-    sql = session.query(Periods).filter(Periods.id == 1)
+    sql = session.query(TBoxes).filter(TBoxes.id == 1)
     assert sql.count() == 1
 
     results = sql.all()
     for result in results:
         assert result.id == 1
-        assert result.period.lower == datetime.datetime(
+        assert result.tbox.tmin == datetime.datetime(
             2018, 1, 1, tzinfo=datetime.timezone.utc
         )
-        assert result.period.upper == datetime.datetime(
+        assert result.tbox.tmax == datetime.datetime(
             2018, 1, 2, tzinfo=datetime.timezone.utc
         )
 
 
 def test_str_values_are_invalid(session):
-    period = "PERIOD (20 30)"
+    tbox = "TBOX ((20,), (30,))"
 
     with pytest.raises(StatementError):
-        session.add(Periods(period=period))
+        session.add(TBoxes(tbox=tbox))
         session.commit()

@@ -1,5 +1,4 @@
 import datetime
-import pandas as pd
 import pytest
 from pymeos.time import TimestampSet
 from sqlalchemy.exc import StatementError
