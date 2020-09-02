@@ -8,9 +8,15 @@ from sqlalchemy import (
 from sqlalchemy.ext.declarative import declarative_base
 
 
-from mobilitydb_sqlalchemy import TBool, TGeomPoint, TGeogPoint, TFloat, TInt
+from mobilitydb_sqlalchemy import Period, TBool, TGeomPoint, TGeogPoint, TFloat, TInt
 
 Base = declarative_base()
+
+
+class Periods(Base):
+    __tablename__ = "period_test_001"
+    id = Column(Integer, primary_key=True)
+    period = Column(Period)
 
 
 class TemporalBools(Base):
