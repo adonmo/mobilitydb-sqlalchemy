@@ -10,6 +10,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from mobilitydb_sqlalchemy import (
     Period,
     PeriodSet,
+    RangeInt,
     STBox,
     TBool,
     TBox,
@@ -33,6 +34,12 @@ class STBoxes(Base):
     __tablename__ = "stbox_test_001"
     id = Column(Integer, primary_key=True)
     stbox = Column(STBox)
+
+
+class RangeInts(Base):
+    __tablename__ = "rangeint_test_001"
+    id = Column(Integer, primary_key=True)
+    rangeint = Column(RangeInt)
 
 
 class Periods(Base):
