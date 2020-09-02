@@ -1,5 +1,12 @@
 # Change Log
 
+## [0.4] - 2020-09-02
+
+- Added support for more types:
+  - Box Types - TBox and STBox (https://github.com/adonmo/mobilitydb-sqlalchemy/issues/4)
+  - Time Types - Period, PeriodSet and TimestampSet (https://github.com/adonmo/mobilitydb-sqlalchemy/issues/2)
+  - Range Types - RangeInt and RangeFloat (https://github.com/adonmo/mobilitydb-sqlalchemy/issues/3)
+
 ## [0.3] - 2020-07-28
 
 - The library now works on top of [PyMEOS](https://github.com/adonmo/meos)
