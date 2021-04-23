@@ -1,35 +1,9 @@
+**********
 Quickstart
-----------
+**********
 
-.. code-block:: python
-    :emphasize-lines: 1, 11, 19
-    :caption: Example usage of the **TGeomPoint** class as a column in a table defined using SQLAlchemy's declarative API
-
-    from mobilitydb_sqlalchemy import TGeomPoint
-
-    from sqlalchemy import Column, Integer
-    from sqlalchemy.ext.declarative import declarative_base
-    Base = declarative_base()
-
-    class Trips(Base):
-        __tablename__ = "test_table_trips_01"
-        car_id = Column(Integer, primary_key=True)
-        trip_id = Column(Integer, primary_key=True)
-        trip = Column(TGeomPoint)
-
-    trips = session.query(Trips).all()
-
-    # Querying using MobilityDB functions, for example - valueAtTimestamp
-    session.query(
-        Trips.car_id,
-        func.asText(
-            func.valueAtTimestamp(Trips.trip, datetime.datetime(2012, 1, 1, 8, 10, 0))
-        ),
-    ).all()
-
-
-Inserting temporal data
------------------------
+Temporal data
+-------------
 
 mobilitydb-sqlalchemy lets you use pandas DataFrame (which are great for timeseries data) while you are in the Python world, and translates it back and for to temporal types defined in mobilitydb.
 
@@ -38,6 +12,10 @@ A point to note here is that we assume that the DataFrame's columns are named "v
 Here we show how we can store numeric data which changes over time (i.e. tfloat), using the :class:`mobilitydb_sqlalchemy.types.TFloat.TFloat` class.
 
 Running the following code will create a new table with a tfloat column, and insert one row of hardcoded data into it.
+
+
+Write data to MobilityDB
+........................
 
 .. code-block:: python
     :emphasize-lines: 4, 19, 32, 33, 34
@@ -78,17 +56,31 @@ Running the following code will create a new table with a tfloat column, and ins
     session.commit()
 
 
-
-Inserting TGeomPoint data
--------------------------
+Geometric data
+--------------
 
 While creating the DataFrame, make sure the column is named "geometry" and not "value". This is to maintain compatibility with movingpandas. We can use Point objects from shapely for preparing the geometry data.
 
+
+Writing
+.......
+
 .. code-block:: python
-    :emphasize-lines: 1, 2, 8, 21, 22, 23
+    :emphasize-lines: 4, 5, 19, 32, 33, 34
+
+    import datetime
+    import pandas as pd
 
     from mobilitydb_sqlalchemy import TGeomPoint
     from shapely.geometry import Point
+    from sqlalchemy import Column, Integer, create_engine
+    from sqlalchemy.ext.declarative import declarative_base
+    from sqlalchemy.orm import sessionmaker
+
+    engine = create_engine("postgresql://docker:docker@db:25432/mobilitydb", echo=True)
+    session = sessionmaker(bind=engine)()
+
+    Base = declarative_base()
 
     class Trips(Base):
         __tablename__ = "trips_test_001"
@@ -112,21 +104,64 @@ While creating the DataFrame, make sure the column is named "geometry" and not "
     session.commit()
 
 
+Querying
+........
+
+.. code-block:: python
+    :emphasize-lines: 1, 11, 19
+    :caption: Example usage of the **TGeomPoint** class as a column in a table defined using SQLAlchemy's declarative API
+
+    from mobilitydb_sqlalchemy import TGeomPoint
+
+    from sqlalchemy import Column, Integer
+    from sqlalchemy.ext.declarative import declarative_base
+    Base = declarative_base()
+
+    class Trips(Base):
+        __tablename__ = "test_table_trips_01"
+        car_id = Column(Integer, primary_key=True)
+        trip_id = Column(Integer, primary_key=True)
+        trip = Column(TGeomPoint)
+
+    trips = session.query(Trips).all()
+
+    # Querying using MobilityDB functions, for example - valueAtTimestamp
+    session.query(
+        Trips.car_id,
+        func.asText(
+            func.valueAtTimestamp(Trips.trip, datetime.datetime(2012, 1, 1, 8, 10, 0))
+        ),
+    ).all()
+
 Inserting TGeomPoint data, using movingpandas
 ---------------------------------------------
 
 movingpandas is an optional dependency, but if installed, you can insert TGeomPoint data with Trajectory objects directly. Just be sure to enable the flag use_movingpandas on the column beforehand.
 
 .. code-block:: python
-    :emphasize-lines: 1, 2, 8, 22, 23, 24, 25
+    :emphasize-lines: 6, 7, 24, 36, 38, 42, 43, 44
+
+    import datetime
+    import pandas as pd
+    from geopandas import GeoDataFrame
+    import movingpandas as mpd
 
     from mobilitydb_sqlalchemy import TGeomPoint
     from shapely.geometry import Point
+    from sqlalchemy import Column, Integer, create_engine
+    from sqlalchemy.ext.declarative import declarative_base
+    from sqlalchemy.orm import sessionmaker
+
     from fiona.crs import from_epsg
     CRS_METRIC = from_epsg(31256)
 
+    engine = create_engine("postgresql://docker:docker@db:25432/mobilitydb", echo=True)
+    session = sessionmaker(bind=engine)()
+
+    Base = declarative_base()
+
     class Trips(Base):
-        __tablename__ = "trips_test_001"
+        __tablename__ = "trips_test_002"
         car_id = Column(Integer, primary_key=True)
         trip_id = Column(Integer, primary_key=True)
         trip = Column(TGeomPoint(use_movingpandas=True))
@@ -152,31 +187,83 @@ movingpandas is an optional dependency, but if installed, you can insert TGeomPo
     session.commit()
 
 
-Using MobilityDB functions
---------------------------
+Querying data from MobilityDB
+-----------------------------
 
 SQLAlchemy's `func` is pretty generic and flexible, allowing us to use MobilityDB's functions without needing any new constructs.
 
 Let's take few example queries from MobilityDB's documentation, and explain how we can achieve the same using this package.
 
+.. code-block:: python
+
+    from sqlalchemy import func
+    from shapely.wkt import loads
+
+
+Value at a given timestamp
+..........................
+
 .. code-block:: sql
 
-    -- Value at a given timestamp
     SELECT CarId, ST_AsText(valueAtTimestamp(Trip, timestamptz '2012-01-01 08:10:00')) FROM Trips;
     -- 10;"POINT(2 0)"
     -- 20;"POINT(1 1)"
 
-    -- Restriction to a given value
+
+.. code-block:: python
+
+    session.query(
+        Trips.car_id,
+        func.asText(
+            func.valueAtTimestamp(Trips.trip, datetime.datetime(2012, 1, 1, 8, 10, 0))
+        ),
+    ).all()
+
+Restriction to a given value
+............................
+
+.. code-block:: sql
+
     SELECT CarId, asText(atValue(Trip, 'Point(2 0)'))
     FROM Trips;
     -- 10;"{"[POINT(2 0)@2012-01-01 08:10:00+00]"}"
     -- 20; NULL
 
-    -- Restriction to a period
+.. code-block:: python
+
+    session.query(
+        Trips.car_id,
+        func.asText(func.atValue(Trips.trip, Point(2, 0).wkt)),
+    ).all()
+
+
+Restriction to a period
+.......................
+
+.. code-block:: sql
+
     SELECT CarId, asText(atPeriod(Trip, '[2012-01-01 08:05:00,2012-01-01 08:10:00]'))
     FROM Trips;
     -- 10;"{[POINT(1 0)@2012-01-01 08:05:00+00, POINT(2 0)@2012-01-01 08:10:00+00]}"
     -- 20;"{[POINT(0 0)@2012-01-01 08:05:00+00, POINT(1 1)@2012-01-01 08:10:00+00]}"
+
+.. code-block:: python
+
+    session.query(
+        Trips.car_id,
+        func.asText(
+            func.atPeriod(Trips.trip, "[2012-01-01 08:05:00,2012-01-01 08:10:00]")
+        ),
+    ).all()
+
+
+Temporal distance
+.................
+
+..
+    This part needs further Explanation. Please elaborate where does T1, T2 come from?
+
+.. code-block:: sql
 
     -- Temporal distance
     SELECT T1.CarId, T2.CarId, T1.Trip <-> T2.Trip
@@ -186,32 +273,6 @@ Let's take few example queries from MobilityDB's documentation, and explain how 
 
 .. code-block:: python
 
-    from sqlalchemy import func
-    from shapely.wkt import loads
-
-    # Value at a given timestamp
-    session.query(
-        Trips.car_id,
-        func.asText(
-            func.valueAtTimestamp(Trips.trip, datetime.datetime(2012, 1, 1, 8, 10, 0))
-        ),
-    ).all()
-
-    # Restriction to a given value
-    session.query(
-        Trip.car_id,
-        func.asText(func.atValue(Trips.trip, Point(2, 0).wkt)),
-    ).all()
-
-    # Restriction to a period
-    session.query(
-        Trips.car_id,
-        func.asText(
-            func.atPeriod(Trips.trip, "[2012-01-01 08:05:00,2012-01-01 08:10:00]")
-        ),
-    ).all()
-
-    # Temporal distance
     session.query(
         T1.c.car_id,
         T2.c.car_id,
@@ -255,7 +316,7 @@ However, to define a column which stores temporal data as a left closed, right o
 
 Making use of movingpandas Trajectory data structure
 ----------------------------------------------------
-TGeomPoint objects can also be optioanlly mapped to movingpandas Trajectory objects.
+TGeomPoint objects can also be optionally mapped to movingpandas Trajectory objects.
 
 For this the optional dependency "movingpandas" needs to be installed.
 
