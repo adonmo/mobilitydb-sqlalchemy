@@ -108,17 +108,24 @@ Querying
 ........
 
 .. code-block:: python
-    :emphasize-lines: 1, 11, 19
+    :emphasize-lines: 3, 18, 26
     :caption: Example usage of the **TGeomPoint** class as a column in a table defined using SQLAlchemy's declarative API
+
+    import datetime
 
     from mobilitydb_sqlalchemy import TGeomPoint
 
-    from sqlalchemy import Column, Integer
+    from sqlalchemy import Column, Integer, create_engine, func
     from sqlalchemy.ext.declarative import declarative_base
+    from sqlalchemy.orm import sessionmaker
+
+    engine = create_engine("postgresql://docker:docker@db:25432/mobilitydb", echo=True)
+    session = sessionmaker(bind=engine)()
+
     Base = declarative_base()
 
     class Trips(Base):
-        __tablename__ = "test_table_trips_01"
+        __tablename__ = "trips_test_001"
         car_id = Column(Integer, primary_key=True)
         trip_id = Column(Integer, primary_key=True)
         trip = Column(TGeomPoint)
@@ -128,7 +135,7 @@ Querying
     # Querying using MobilityDB functions, for example - valueAtTimestamp
     session.query(
         Trips.car_id,
-        func.asText(
+        func.ST_asText(
             func.valueAtTimestamp(Trips.trip, datetime.datetime(2012, 1, 1, 8, 10, 0))
         ),
     ).all()
