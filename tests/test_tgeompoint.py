@@ -17,13 +17,28 @@ from .models import Trips, TripsWithMovingPandas
 def test_simple_insert(session):
     df = pd.DataFrame(
         [
-            {"geometry": Point(0, 0), "t": datetime.datetime(2012, 1, 1, 8, 0, 0),},
-            {"geometry": Point(2, 0), "t": datetime.datetime(2012, 1, 1, 8, 10, 0),},
-            {"geometry": Point(2, -1.9), "t": datetime.datetime(2012, 1, 1, 8, 15, 0),},
+            {
+                "geometry": Point(0, 0),
+                "t": datetime.datetime(2012, 1, 1, 8, 0, 0),
+            },
+            {
+                "geometry": Point(2, 0),
+                "t": datetime.datetime(2012, 1, 1, 8, 10, 0),
+            },
+            {
+                "geometry": Point(2, -1.9),
+                "t": datetime.datetime(2012, 1, 1, 8, 15, 0),
+            },
         ]
     ).set_index("t")
 
-    session.add(Trips(car_id=1, trip_id=1, trip=df,))
+    session.add(
+        Trips(
+            car_id=1,
+            trip_id=1,
+            trip=df,
+        )
+    )
     session.commit()
 
     sql = session.query(Trips).filter(Trips.trip_id == 1)
@@ -48,8 +63,14 @@ def test_simple_insert_with_movingpandas(session):
 
     df = pd.DataFrame(
         [
-            {"geometry": Point(0, 0), "t": datetime.datetime(2012, 1, 1, 8, 0, 0),},
-            {"geometry": Point(2, 0), "t": datetime.datetime(2012, 1, 1, 8, 10, 0),},
+            {
+                "geometry": Point(0, 0),
+                "t": datetime.datetime(2012, 1, 1, 8, 0, 0),
+            },
+            {
+                "geometry": Point(2, 0),
+                "t": datetime.datetime(2012, 1, 1, 8, 10, 0),
+            },
             {
                 "geometry": Point(2, -1.98),
                 "t": datetime.datetime(2012, 1, 1, 8, 15, 0),
@@ -58,7 +79,13 @@ def test_simple_insert_with_movingpandas(session):
     ).set_index("t")
     geo_df = GeoDataFrame(df, crs=CRS_METRIC)
     traj = mpd.Trajectory(geo_df, 1)
-    session.add(TripsWithMovingPandas(car_id=1, trip_id=1, trip=traj,))
+    session.add(
+        TripsWithMovingPandas(
+            car_id=1,
+            trip_id=1,
+            trip=traj,
+        )
+    )
     session.commit()
 
     sql = session.query(TripsWithMovingPandas).filter(
@@ -87,7 +114,13 @@ def test_wkt_values_are_valid(session):
     ).set_index("t")
 
     with pytest.raises(StatementError):
-        session.add(Trips(car_id=1, trip_id=1, trip=df,))
+        session.add(
+            Trips(
+                car_id=1,
+                trip_id=1,
+                trip=df,
+            )
+        )
         session.commit()
 
 
@@ -100,42 +133,86 @@ def test_str_values_are_invalid(session):
     ).set_index("t")
 
     with pytest.raises(StatementError):
-        session.add(Trips(car_id=1, trip_id=1, trip=df,))
+        session.add(
+            Trips(
+                car_id=1,
+                trip_id=1,
+                trip=df,
+            )
+        )
         session.commit()
 
 
 def test_float_values_are_invalid(session):
     df = pd.DataFrame(
-        [{"geometry": 8.1, "t": datetime.datetime(2012, 1, 1, 12, 6, 0)},]
+        [
+            {"geometry": 8.1, "t": datetime.datetime(2012, 1, 1, 12, 6, 0)},
+        ]
     ).set_index("t")
 
     with pytest.raises(StatementError):
-        session.add(Trips(car_id=1, trip_id=1, trip=df,))
+        session.add(
+            Trips(
+                car_id=1,
+                trip_id=1,
+                trip=df,
+            )
+        )
         session.commit()
 
 
 def test_mobility_functions(session):
     df1 = pd.DataFrame(
         [
-            {"geometry": Point(0, 0), "t": datetime.datetime(2012, 1, 1, 8, 0, 0),},
-            {"geometry": Point(2, 0), "t": datetime.datetime(2012, 1, 1, 8, 10, 0),},
-            {"geometry": Point(2, 1), "t": datetime.datetime(2012, 1, 1, 8, 15, 0),},
+            {
+                "geometry": Point(0, 0),
+                "t": datetime.datetime(2012, 1, 1, 8, 0, 0),
+            },
+            {
+                "geometry": Point(2, 0),
+                "t": datetime.datetime(2012, 1, 1, 8, 10, 0),
+            },
+            {
+                "geometry": Point(2, 1),
+                "t": datetime.datetime(2012, 1, 1, 8, 15, 0),
+            },
         ]
     ).set_index("t")
 
-    session.add(Trips(car_id=10, trip_id=1, trip=df1,))
+    session.add(
+        Trips(
+            car_id=10,
+            trip_id=1,
+            trip=df1,
+        )
+    )
 
     session.commit()
 
     df2 = pd.DataFrame(
         [
-            {"geometry": Point(0, 0), "t": datetime.datetime(2012, 1, 1, 8, 5, 0),},
-            {"geometry": Point(1, 1), "t": datetime.datetime(2012, 1, 1, 8, 10, 0),},
-            {"geometry": Point(3, 3), "t": datetime.datetime(2012, 1, 1, 8, 20, 0),},
+            {
+                "geometry": Point(0, 0),
+                "t": datetime.datetime(2012, 1, 1, 8, 5, 0),
+            },
+            {
+                "geometry": Point(1, 1),
+                "t": datetime.datetime(2012, 1, 1, 8, 10, 0),
+            },
+            {
+                "geometry": Point(3, 3),
+                "t": datetime.datetime(2012, 1, 1, 8, 20, 0),
+            },
         ]
     ).set_index("t")
 
-    session.add(Trips(car_id=20, trip_id=1, trip=df2,))
+    session.add(
+        Trips(
+            car_id=20,
+            trip_id=1,
+            trip=df2,
+        )
+    )
 
     session.commit()
 
@@ -155,7 +232,8 @@ def test_mobility_functions(session):
 
     # Restriction to a given value
     trips = session.query(
-        Trips.car_id, func.asText(func.atValue(Trips.trip, Point(2, 0).wkt)),
+        Trips.car_id,
+        func.asText(func.atValue(Trips.trip, Point(2, 0).wkt)),
     ).all()
 
     assert len(trips) == 2
@@ -188,8 +266,14 @@ def test_mobility_functions(session):
     T1 = alias(Trips)
     T2 = alias(Trips)
     trips = (
-        session.query(T1.c.car_id, T2.c.car_id, T1.c.trip.distance(T2.c.trip),)
-        .filter(T1.c.car_id < T2.c.car_id,)
+        session.query(
+            T1.c.car_id,
+            T2.c.car_id,
+            T1.c.trip.distance(T2.c.trip),
+        )
+        .filter(
+            T1.c.car_id < T2.c.car_id,
+        )
         .all()
     )
 

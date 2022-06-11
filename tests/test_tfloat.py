@@ -16,7 +16,11 @@ def test_simple_insert(session):
         ]
     ).set_index("t")
 
-    session.add(TemporalFloats(tdata=df,))
+    session.add(
+        TemporalFloats(
+            tdata=df,
+        )
+    )
     session.commit()
 
     sql = session.query(TemporalFloats).filter(TemporalFloats.id == 1)
@@ -40,7 +44,11 @@ def test_int_values_are_valid(session):
         ]
     ).set_index("t")
 
-    session.add(TemporalFloats(tdata=df,))
+    session.add(
+        TemporalFloats(
+            tdata=df,
+        )
+    )
     session.commit()
 
 
@@ -53,7 +61,11 @@ def test_bool_values_are_invalid(session):
     ).set_index("t")
 
     with pytest.raises(StatementError):
-        session.add(TemporalFloats(tdata=df,))
+        session.add(
+            TemporalFloats(
+                tdata=df,
+            )
+        )
         session.commit()
 
 
@@ -66,5 +78,9 @@ def test_str_values_are_invalid(session):
     ).set_index("t")
 
     with pytest.raises(StatementError):
-        session.add(TemporalFloats(tdata=df,))
+        session.add(
+            TemporalFloats(
+                tdata=df,
+            )
+        )
         session.commit()

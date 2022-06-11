@@ -16,7 +16,11 @@ def test_simple_insert(session):
         ]
     ).set_index("t")
 
-    session.add(TemporalBools(tdata=df,))
+    session.add(
+        TemporalBools(
+            tdata=df,
+        )
+    )
     session.commit()
 
     sql = session.query(TemporalBools).filter(TemporalBools.id == 1)
@@ -49,7 +53,11 @@ def test_float_values_are_invalid(session):
     ).set_index("t")
 
     with pytest.raises(StatementError):
-        session.add(TemporalBools(tdata=df,))
+        session.add(
+            TemporalBools(
+                tdata=df,
+            )
+        )
         session.commit()
 
 
@@ -57,10 +65,17 @@ def test_str_values_are_invalid(session):
     df = pd.DataFrame(
         [
             {"value": "True", "t": datetime.datetime(2018, 1, 1, 12, 0, 0)},
-            {"value": "False", "t": datetime.datetime(2018, 1, 1, 12, 6, 0),},
+            {
+                "value": "False",
+                "t": datetime.datetime(2018, 1, 1, 12, 6, 0),
+            },
         ]
     ).set_index("t")
 
     with pytest.raises(StatementError):
-        session.add(TemporalBools(tdata=df,))
+        session.add(
+            TemporalBools(
+                tdata=df,
+            )
+        )
         session.commit()

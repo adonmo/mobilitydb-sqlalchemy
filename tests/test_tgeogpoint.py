@@ -20,13 +20,28 @@ from .postgis_types import Geometry
 def test_simple_insert(session):
     df = pd.DataFrame(
         [
-            {"geometry": Point(0, 0), "t": datetime.datetime(2012, 1, 1, 8, 0, 0),},
-            {"geometry": Point(2, 0), "t": datetime.datetime(2012, 1, 1, 8, 10, 0),},
-            {"geometry": Point(2, -1.9), "t": datetime.datetime(2012, 1, 1, 8, 15, 0),},
+            {
+                "geometry": Point(0, 0),
+                "t": datetime.datetime(2012, 1, 1, 8, 0, 0),
+            },
+            {
+                "geometry": Point(2, 0),
+                "t": datetime.datetime(2012, 1, 1, 8, 10, 0),
+            },
+            {
+                "geometry": Point(2, -1.9),
+                "t": datetime.datetime(2012, 1, 1, 8, 15, 0),
+            },
         ]
     ).set_index("t")
 
-    session.add(GeogTrips(car_id=1, trip_id=1, trip=df,))
+    session.add(
+        GeogTrips(
+            car_id=1,
+            trip_id=1,
+            trip=df,
+        )
+    )
     session.commit()
 
     sql = session.query(GeogTrips).filter(GeogTrips.trip_id == 1)
@@ -51,8 +66,14 @@ def test_simple_insert_with_movingpandas(session):
 
     df = pd.DataFrame(
         [
-            {"geometry": Point(0, 0), "t": datetime.datetime(2012, 1, 1, 8, 0, 0),},
-            {"geometry": Point(2, 0), "t": datetime.datetime(2012, 1, 1, 8, 10, 0),},
+            {
+                "geometry": Point(0, 0),
+                "t": datetime.datetime(2012, 1, 1, 8, 0, 0),
+            },
+            {
+                "geometry": Point(2, 0),
+                "t": datetime.datetime(2012, 1, 1, 8, 10, 0),
+            },
             {
                 "geometry": Point(2, -1.98),
                 "t": datetime.datetime(2012, 1, 1, 8, 15, 0),
@@ -61,7 +82,13 @@ def test_simple_insert_with_movingpandas(session):
     ).set_index("t")
     geo_df = GeoDataFrame(df, crs=CRS_METRIC)
     traj = mpd.Trajectory(geo_df, 1)
-    session.add(GeogTripsWithMovingPandas(car_id=1, trip_id=1, trip=traj,))
+    session.add(
+        GeogTripsWithMovingPandas(
+            car_id=1,
+            trip_id=1,
+            trip=traj,
+        )
+    )
     session.commit()
 
     sql = session.query(GeogTripsWithMovingPandas).filter(
@@ -90,7 +117,13 @@ def test_wkt_values_are_valid(session):
     ).set_index("t")
 
     with pytest.raises(StatementError):
-        session.add(GeogTrips(car_id=1, trip_id=1, trip=df,))
+        session.add(
+            GeogTrips(
+                car_id=1,
+                trip_id=1,
+                trip=df,
+            )
+        )
         session.commit()
 
 
@@ -103,42 +136,86 @@ def test_str_values_are_invalid(session):
     ).set_index("t")
 
     with pytest.raises(StatementError):
-        session.add(GeogTrips(car_id=1, trip_id=1, trip=df,))
+        session.add(
+            GeogTrips(
+                car_id=1,
+                trip_id=1,
+                trip=df,
+            )
+        )
         session.commit()
 
 
 def test_float_values_are_invalid(session):
     df = pd.DataFrame(
-        [{"geometry": 8.1, "t": datetime.datetime(2012, 1, 1, 12, 6, 0)},]
+        [
+            {"geometry": 8.1, "t": datetime.datetime(2012, 1, 1, 12, 6, 0)},
+        ]
     ).set_index("t")
 
     with pytest.raises(StatementError):
-        session.add(GeogTrips(car_id=1, trip_id=1, trip=df,))
+        session.add(
+            GeogTrips(
+                car_id=1,
+                trip_id=1,
+                trip=df,
+            )
+        )
         session.commit()
 
 
 def test_mobility_functions(session):
     df1 = pd.DataFrame(
         [
-            {"geometry": Point(0, 0), "t": datetime.datetime(2012, 1, 1, 8, 0, 0),},
-            {"geometry": Point(2, 0), "t": datetime.datetime(2012, 1, 1, 8, 10, 0),},
-            {"geometry": Point(2, 1), "t": datetime.datetime(2012, 1, 1, 8, 15, 0),},
+            {
+                "geometry": Point(0, 0),
+                "t": datetime.datetime(2012, 1, 1, 8, 0, 0),
+            },
+            {
+                "geometry": Point(2, 0),
+                "t": datetime.datetime(2012, 1, 1, 8, 10, 0),
+            },
+            {
+                "geometry": Point(2, 1),
+                "t": datetime.datetime(2012, 1, 1, 8, 15, 0),
+            },
         ]
     ).set_index("t")
 
-    session.add(GeogTrips(car_id=10, trip_id=1, trip=df1,))
+    session.add(
+        GeogTrips(
+            car_id=10,
+            trip_id=1,
+            trip=df1,
+        )
+    )
 
     session.commit()
 
     df2 = pd.DataFrame(
         [
-            {"geometry": Point(0, 0), "t": datetime.datetime(2012, 1, 1, 8, 5, 0),},
-            {"geometry": Point(1, 1), "t": datetime.datetime(2012, 1, 1, 8, 10, 0),},
-            {"geometry": Point(3, 3), "t": datetime.datetime(2012, 1, 1, 8, 20, 0),},
+            {
+                "geometry": Point(0, 0),
+                "t": datetime.datetime(2012, 1, 1, 8, 5, 0),
+            },
+            {
+                "geometry": Point(1, 1),
+                "t": datetime.datetime(2012, 1, 1, 8, 10, 0),
+            },
+            {
+                "geometry": Point(3, 3),
+                "t": datetime.datetime(2012, 1, 1, 8, 20, 0),
+            },
         ]
     ).set_index("t")
 
-    session.add(GeogTrips(car_id=20, trip_id=1, trip=df2,))
+    session.add(
+        GeogTrips(
+            car_id=20,
+            trip_id=1,
+            trip=df2,
+        )
+    )
 
     session.commit()
 
@@ -163,7 +240,8 @@ def test_mobility_functions(session):
 
     # Restriction to a given value
     trips = session.query(
-        GeogTrips.car_id, func.asText(func.atValue(GeogTrips.trip, Point(2, 0).wkt)),
+        GeogTrips.car_id,
+        func.asText(func.atValue(GeogTrips.trip, Point(2, 0).wkt)),
     ).all()
 
     assert len(trips) == 2
@@ -201,8 +279,14 @@ def test_mobility_functions(session):
     T1 = alias(GeogTrips)
     T2 = alias(GeogTrips)
     trips = (
-        session.query(T1.c.car_id, T2.c.car_id, T1.c.trip.distance(T2.c.trip),)
-        .filter(T1.c.car_id < T2.c.car_id,)
+        session.query(
+            T1.c.car_id,
+            T2.c.car_id,
+            T1.c.trip.distance(T2.c.trip),
+        )
+        .filter(
+            T1.c.car_id < T2.c.car_id,
+        )
         .all()
     )
 
@@ -246,6 +330,6 @@ def haversine(lat1, lon1, lat2, lon2, **kwarg):
     dlat = lat2 - lat1
     dlon = lon2 - lon1
     a = np.sin(dlat / 2) ** 2 + np.cos(lat1) * np.cos(lat2) * np.sin(dlon / 2) ** 2
-    c = 2 * np.arctan2(a ** 0.5, (1 - a) ** 0.5)
+    c = 2 * np.arctan2(a**0.5, (1 - a) ** 0.5)
     d = R * c
     return round(d, 4)
