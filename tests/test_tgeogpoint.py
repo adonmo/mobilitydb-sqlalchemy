@@ -145,7 +145,7 @@ def test_mobility_functions(session):
     # Value at a given timestamp
     trips = session.query(
         GeogTrips.car_id,
-        func.asText(
+        func.ST_asText(
             cast(
                 func.valueAtTimestamp(
                     GeogTrips.trip, datetime.datetime(2012, 1, 1, 8, 10, 0)

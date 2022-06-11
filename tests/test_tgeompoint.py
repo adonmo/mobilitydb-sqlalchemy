@@ -142,7 +142,7 @@ def test_mobility_functions(session):
     # Value at a given timestamp
     trips = session.query(
         Trips.car_id,
-        func.asText(
+        func.ST_asText(
             func.valueAtTimestamp(Trips.trip, datetime.datetime(2012, 1, 1, 8, 10, 0))
         ),
     ).all()
