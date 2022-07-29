@@ -219,7 +219,7 @@ python-versions = "*"
 click = ">=4.0"
 
 [package.extras]
-dev = ["pytest (>=3.6)", "pytest-cov", "wheel", "coveralls"]
+dev = ["coveralls", "wheel", "pytest-cov", "pytest (>=3.6)"]
 
 [[package]]
 name = "cligj"
@@ -256,12 +256,12 @@ param = ">=1.7.0"
 pyct = ">=0.4.4"
 
 [package.extras]
-all = ["bokeh", "flake8", "holoviews", "keyring", "matplotlib", "nbsite (>=0.6.1)", "nbsmoke (>=0.2.6)", "numpy", "param (>=1.7.0)", "pyct (>=0.4.4)", "pytest (>=2.8.5)", "pytest-cov", "pytest-mpl", "rfc3986", "setuptools (>=30.3.0)", "sphinx-holoviz-theme", "twine", "wheel"]
-build = ["param (>=1.7.0)", "pyct (>=0.4.4)", "setuptools (>=30.3.0)", "wheel"]
-doc = ["numpy", "holoviews", "matplotlib", "bokeh", "nbsite (>=0.6.1)", "sphinx-holoviz-theme"]
-examples = ["numpy", "holoviews", "matplotlib", "bokeh"]
-tests = ["flake8", "nbsmoke (>=0.2.6)", "pytest (>=2.8.5)", "pytest-cov", "twine", "rfc3986", "keyring"]
-tests_extra = ["flake8", "nbsmoke (>=0.2.6)", "pytest (>=2.8.5)", "pytest-cov", "twine", "rfc3986", "keyring", "pytest-mpl"]
+tests_extra = ["pytest-mpl", "keyring", "rfc3986", "twine", "pytest-cov", "pytest (>=2.8.5)", "nbsmoke (>=0.2.6)", "flake8"]
+tests = ["keyring", "rfc3986", "twine", "pytest-cov", "pytest (>=2.8.5)", "nbsmoke (>=0.2.6)", "flake8"]
+examples = ["bokeh", "matplotlib", "holoviews", "numpy"]
+doc = ["sphinx-holoviz-theme", "nbsite (>=0.6.1)", "bokeh", "matplotlib", "holoviews", "numpy"]
+build = ["wheel", "setuptools (>=30.3.0)", "pyct (>=0.4.4)", "param (>=1.7.0)"]
+all = ["wheel", "twine", "sphinx-holoviz-theme", "setuptools (>=30.3.0)", "rfc3986", "pytest-mpl", "pytest-cov", "pytest (>=2.8.5)", "pyct (>=0.4.4)", "param (>=1.7.0)", "numpy", "nbsmoke (>=0.2.6)", "nbsite (>=0.6.1)", "matplotlib", "keyring", "holoviews", "flake8", "bokeh"]
 
 [[package]]
 name = "cycler"
@@ -342,7 +342,7 @@ python-versions = ">=3.5"
 requests = "*"
 
 [package.extras]
-dev = ["pytest", "pytest-xdist"]
+dev = ["pytest-xdist", "pytest"]
 
 [[package]]
 name = "dephell-discover"
@@ -413,7 +413,7 @@ optional = false
 python-versions = ">=3.5"
 
 [package.extras]
-dev = ["mypy", "pkginfo", "pytest"]
+dev = ["pytest", "pkginfo", "mypy"]
 
 [[package]]
 name = "dephell-shells"
@@ -600,13 +600,13 @@ python-versions = ">=3.5"
 geographiclib = ">=1.49,<2"
 
 [package.extras]
-aiohttp = ["aiohttp"]
-dev = ["async-generator", "coverage", "flake8 (>=3.8.0,<3.9.0)", "isort (>=5.6.0,<5.7.0)", "pytest-aiohttp", "pytest (>=3.10)", "readme-renderer", "sphinx", "sphinx-issues", "sphinx-rtd-theme (>=0.5.0)"]
-dev-docs = ["readme-renderer", "sphinx", "sphinx-issues", "sphinx-rtd-theme (>=0.5.0)"]
-dev-lint = ["async-generator", "flake8 (>=3.8.0,<3.9.0)", "isort (>=5.6.0,<5.7.0)"]
-dev-test = ["async-generator", "coverage", "pytest-aiohttp", "pytest (>=3.10)", "sphinx"]
-requests = ["urllib3 (>=1.24.2)", "requests (>=2.16.2)"]
 timezone = ["pytz"]
+requests = ["requests (>=2.16.2)", "urllib3 (>=1.24.2)"]
+dev-test = ["sphinx", "pytest (>=3.10)", "pytest-aiohttp", "coverage", "async-generator"]
+dev-lint = ["isort (>=5.6.0,<5.7.0)", "flake8 (>=3.8.0,<3.9.0)", "async-generator"]
+dev-docs = ["sphinx-rtd-theme (>=0.5.0)", "sphinx-issues", "sphinx", "readme-renderer"]
+dev = ["sphinx-rtd-theme (>=0.5.0)", "sphinx-issues", "sphinx", "readme-renderer", "pytest (>=3.10)", "pytest-aiohttp", "isort (>=5.6.0,<5.7.0)", "flake8 (>=3.8.0,<3.9.0)", "coverage", "async-generator"]
+aiohttp = ["aiohttp"]
 
 [[package]]
 name = "geoviews"
@@ -688,12 +688,12 @@ packaging = "*"
 pandas = "*"
 
 [package.extras]
-all = ["cartopy (>=0.18.0)", "codecov", "dask (>=2021.3.0)", "datashader (>=0.6.5)", "fiona (>=1.8.18)", "flake8", "geopandas (>=0.9.0)", "geoviews (>=1.6.0)", "intake (>=0.6.5)", "intake-parquet (>=0.2.3)", "intake-xarray (>=0.5.0)", "matplotlib", "nbsite (>=0.7.1)", "nbsmoke (>=0.2.0)", "networkx (>=2.6.3)", "notebook (>=5.4)", "numba (>=0.51.0)", "numpy (>=1.7)", "param (>=1.6.1)", "parameterized", "pillow (>=8.2.0)", "plotly", "pooch", "pooch (>=1.6.0)", "pyct (>=0.4.4)", "pydata-sphinx-theme", "pyepsg (>=0.4.0)", "pygraphviz", "pyproj (>=3.0.1)", "pytest", "pytest-cov", "python-snappy (>=0.6.0)", "rasterio (>=1.2.6)", "s3fs (>=2022.1.0)", "scikit-image (>=0.17.2)", "scipy", "scipy (>=1.5.3)", "selenium (>=3.141.0)", "setuptools", "spatialpandas (>=0.4.3)", "sphinx-copybutton", "streamz (>=0.3.0)", "xarray", "xarray (>=0.18.2)"]
-build = ["param (>=1.6.1)", "pyct (>=0.4.4)", "setuptools"]
-doc = ["geoviews (>=1.6.0)", "numba (>=0.51.0)", "geopandas (>=0.9.0)", "xarray (>=0.18.2)", "networkx (>=2.6.3)", "streamz (>=0.3.0)", "intake (>=0.6.5)", "intake-parquet (>=0.2.3)", "intake-xarray (>=0.5.0)", "dask (>=2021.3.0)", "datashader (>=0.6.5)", "notebook (>=5.4)", "rasterio (>=1.2.6)", "cartopy (>=0.18.0)", "pyproj (>=3.0.1)", "s3fs (>=2022.1.0)", "scipy (>=1.5.3)", "pillow (>=8.2.0)", "selenium (>=3.141.0)", "spatialpandas (>=0.4.3)", "scikit-image (>=0.17.2)", "python-snappy (>=0.6.0)", "pooch (>=1.6.0)", "fiona (>=1.8.18)", "pyepsg (>=0.4.0)", "matplotlib", "plotly", "pygraphviz", "nbsite (>=0.7.1)", "pydata-sphinx-theme", "sphinx-copybutton"]
-examples = ["geoviews (>=1.6.0)", "numba (>=0.51.0)", "geopandas (>=0.9.0)", "xarray (>=0.18.2)", "networkx (>=2.6.3)", "streamz (>=0.3.0)", "intake (>=0.6.5)", "intake-parquet (>=0.2.3)", "intake-xarray (>=0.5.0)", "dask (>=2021.3.0)", "datashader (>=0.6.5)", "notebook (>=5.4)", "rasterio (>=1.2.6)", "cartopy (>=0.18.0)", "pyproj (>=3.0.1)", "s3fs (>=2022.1.0)", "scipy (>=1.5.3)", "pillow (>=8.2.0)", "selenium (>=3.141.0)", "spatialpandas (>=0.4.3)", "scikit-image (>=0.17.2)", "python-snappy (>=0.6.0)", "pooch (>=1.6.0)", "fiona (>=1.8.18)", "pyepsg (>=0.4.0)", "matplotlib", "plotly"]
-examples_extra = ["geoviews (>=1.6.0)", "numba (>=0.51.0)", "geopandas (>=0.9.0)", "xarray (>=0.18.2)", "networkx (>=2.6.3)", "streamz (>=0.3.0)", "intake (>=0.6.5)", "intake-parquet (>=0.2.3)", "intake-xarray (>=0.5.0)", "dask (>=2021.3.0)", "datashader (>=0.6.5)", "notebook (>=5.4)", "rasterio (>=1.2.6)", "cartopy (>=0.18.0)", "pyproj (>=3.0.1)", "s3fs (>=2022.1.0)", "scipy (>=1.5.3)", "pillow (>=8.2.0)", "selenium (>=3.141.0)", "spatialpandas (>=0.4.3)", "scikit-image (>=0.17.2)", "python-snappy (>=0.6.0)", "pooch (>=1.6.0)", "fiona (>=1.8.18)", "pyepsg (>=0.4.0)", "matplotlib", "plotly", "pygraphviz"]
-tests = ["codecov", "flake8", "parameterized", "pytest", "pytest-cov", "nbsmoke (>=0.2.0)", "numpy (>=1.7)", "matplotlib", "plotly", "xarray", "pooch", "scipy"]
+tests = ["scipy", "pooch", "xarray", "plotly", "matplotlib", "numpy (>=1.7)", "nbsmoke (>=0.2.0)", "pytest-cov", "pytest", "parameterized", "flake8", "codecov"]
+examples_extra = ["pygraphviz", "plotly", "matplotlib", "pyepsg (>=0.4.0)", "fiona (>=1.8.18)", "pooch (>=1.6.0)", "python-snappy (>=0.6.0)", "scikit-image (>=0.17.2)", "spatialpandas (>=0.4.3)", "selenium (>=3.141.0)", "pillow (>=8.2.0)", "scipy (>=1.5.3)", "s3fs (>=2022.1.0)", "pyproj (>=3.0.1)", "cartopy (>=0.18.0)", "rasterio (>=1.2.6)", "notebook (>=5.4)", "datashader (>=0.6.5)", "dask (>=2021.3.0)", "intake-xarray (>=0.5.0)", "intake-parquet (>=0.2.3)", "intake (>=0.6.5)", "streamz (>=0.3.0)", "networkx (>=2.6.3)", "xarray (>=0.18.2)", "geopandas (>=0.9.0)", "numba (>=0.51.0)", "geoviews (>=1.6.0)"]
+examples = ["plotly", "matplotlib", "pyepsg (>=0.4.0)", "fiona (>=1.8.18)", "pooch (>=1.6.0)", "python-snappy (>=0.6.0)", "scikit-image (>=0.17.2)", "spatialpandas (>=0.4.3)", "selenium (>=3.141.0)", "pillow (>=8.2.0)", "scipy (>=1.5.3)", "s3fs (>=2022.1.0)", "pyproj (>=3.0.1)", "cartopy (>=0.18.0)", "rasterio (>=1.2.6)", "notebook (>=5.4)", "datashader (>=0.6.5)", "dask (>=2021.3.0)", "intake-xarray (>=0.5.0)", "intake-parquet (>=0.2.3)", "intake (>=0.6.5)", "streamz (>=0.3.0)", "networkx (>=2.6.3)", "xarray (>=0.18.2)", "geopandas (>=0.9.0)", "numba (>=0.51.0)", "geoviews (>=1.6.0)"]
+doc = ["sphinx-copybutton", "pydata-sphinx-theme", "nbsite (>=0.7.1)", "pygraphviz", "plotly", "matplotlib", "pyepsg (>=0.4.0)", "fiona (>=1.8.18)", "pooch (>=1.6.0)", "python-snappy (>=0.6.0)", "scikit-image (>=0.17.2)", "spatialpandas (>=0.4.3)", "selenium (>=3.141.0)", "pillow (>=8.2.0)", "scipy (>=1.5.3)", "s3fs (>=2022.1.0)", "pyproj (>=3.0.1)", "cartopy (>=0.18.0)", "rasterio (>=1.2.6)", "notebook (>=5.4)", "datashader (>=0.6.5)", "dask (>=2021.3.0)", "intake-xarray (>=0.5.0)", "intake-parquet (>=0.2.3)", "intake (>=0.6.5)", "streamz (>=0.3.0)", "networkx (>=2.6.3)", "xarray (>=0.18.2)", "geopandas (>=0.9.0)", "numba (>=0.51.0)", "geoviews (>=1.6.0)"]
+build = ["setuptools", "pyct (>=0.4.4)", "param (>=1.6.1)"]
+all = ["xarray (>=0.18.2)", "xarray", "streamz (>=0.3.0)", "sphinx-copybutton", "spatialpandas (>=0.4.3)", "setuptools", "selenium (>=3.141.0)", "scipy (>=1.5.3)", "scipy", "scikit-image (>=0.17.2)", "s3fs (>=2022.1.0)", "rasterio (>=1.2.6)", "python-snappy (>=0.6.0)", "pytest-cov", "pytest", "pyproj (>=3.0.1)", "pygraphviz", "pyepsg (>=0.4.0)", "pydata-sphinx-theme", "pyct (>=0.4.4)", "pooch (>=1.6.0)", "pooch", "plotly", "pillow (>=8.2.0)", "parameterized", "param (>=1.6.1)", "numpy (>=1.7)", "numba (>=0.51.0)", "notebook (>=5.4)", "networkx (>=2.6.3)", "nbsmoke (>=0.2.0)", "nbsite (>=0.7.1)", "matplotlib", "intake-xarray (>=0.5.0)", "intake-parquet (>=0.2.3)", "intake (>=0.6.5)", "geoviews (>=1.6.0)", "geopandas (>=0.9.0)", "flake8", "fiona (>=1.8.18)", "datashader (>=0.6.5)", "dask (>=2021.3.0)", "codecov", "cartopy (>=0.18.0)"]
 
 [[package]]
 name = "identify"
@@ -823,8 +823,8 @@ setuptools_scm = ">=4"
 
 [[package]]
 name = "mistune"
-version = "0.8.4"
-description = "The fastest markdown parser in pure Python"
+version = "2.0.3"
+description = "A sane Markdown parser with useful plugins and renderers"
 category = "dev"
 optional = false
 python-versions = "*"
@@ -1024,8 +1024,8 @@ optional = false
 python-versions = ">=3.6"
 
 [package.extras]
-dev = ["pre-commit", "tox"]
-testing = ["pytest", "pytest-benchmark"]
+testing = ["pytest-benchmark", "pytest"]
+dev = ["tox", "pre-commit"]
 
 [[package]]
 name = "pre-commit"
@@ -1101,7 +1101,7 @@ optional = false
 python-versions = "*"
 
 [package.extras]
-docs = ["sphinx", "sphinx-rtd-theme", "numpydoc"]
+docs = ["numpydoc", "sphinx-rtd-theme", "sphinx"]
 
 [[package]]
 name = "pyparsing"
@@ -1185,9 +1185,9 @@ python-versions = "*"
 param = "*"
 
 [package.extras]
-all = ["flake8", "jupyter-packaging (>=0.7.9,<0.8.0)", "jupyterlab (>=3.0,<4.0)", "keyring", "nose", "rfc3986", "setuptools (>=40.8.0,<61)", "twine"]
-build = ["setuptools (>=40.8.0,<61)", "jupyterlab (>=3.0,<4.0)", "jupyter-packaging (>=0.7.9,<0.8.0)", "twine", "rfc3986", "keyring"]
-tests = ["flake8", "nose"]
+tests = ["nose", "flake8"]
+build = ["keyring", "rfc3986", "twine", "jupyter-packaging (>=0.7.9,<0.8.0)", "jupyterlab (>=3.0,<4.0)", "setuptools (>=40.8.0,<61)"]
+all = ["twine", "setuptools (>=40.8.0,<61)", "rfc3986", "nose", "keyring", "jupyterlab (>=3.0,<4.0)", "jupyter-packaging (>=0.7.9,<0.8.0)", "flake8"]
 
 [[package]]
 name = "pyyaml"
@@ -1341,8 +1341,8 @@ optional = true
 python-versions = ">=3.5"
 
 [package.extras]
-lint = ["flake8", "mypy", "docutils-stubs"]
 test = ["pytest"]
+lint = ["docutils-stubs", "mypy", "flake8"]
 
 [[package]]
 name = "sphinxcontrib-devhelp"
@@ -1353,8 +1353,8 @@ optional = true
 python-versions = ">=3.5"
 
 [package.extras]
-lint = ["flake8", "mypy", "docutils-stubs"]
 test = ["pytest"]
+lint = ["docutils-stubs", "mypy", "flake8"]
 
 [[package]]
 name = "sphinxcontrib-htmlhelp"
@@ -1365,8 +1365,8 @@ optional = true
 python-versions = ">=3.6"
 
 [package.extras]
-lint = ["flake8", "mypy", "docutils-stubs"]
-test = ["pytest", "html5lib"]
+test = ["html5lib", "pytest"]
+lint = ["docutils-stubs", "mypy", "flake8"]
 
 [[package]]
 name = "sphinxcontrib-jsmath"
@@ -1377,7 +1377,7 @@ optional = true
 python-versions = ">=3.5"
 
 [package.extras]
-test = ["pytest", "flake8", "mypy"]
+test = ["mypy", "flake8", "pytest"]
 
 [[package]]
 name = "sphinxcontrib-qthelp"
@@ -1388,8 +1388,8 @@ optional = true
 python-versions = ">=3.5"
 
 [package.extras]
-lint = ["flake8", "mypy", "docutils-stubs"]
 test = ["pytest"]
+lint = ["docutils-stubs", "mypy", "flake8"]
 
 [[package]]
 name = "sphinxcontrib-serializinghtml"
@@ -1581,7 +1581,7 @@ movingpandas = ["movingpandas"]
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.8,<4"
-content-hash = "7ed9fe16f9cd9cbdd36fd52a2957f57eedb80e734afaddd09662239a79f8c289"
+content-hash = "d301d26ffd0325f29b607afb6a3702915b23d3a1230287731ef842e03c98c5a3"
 
 [metadata.files]
 aiohttp = [
@@ -2152,8 +2152,8 @@ matplotlib = [
     {file = "matplotlib-3.5.2.tar.gz", hash = "sha256:48cf850ce14fa18067f2d9e0d646763681948487a8080ec0af2686468b4607a2"},
 ]
 mistune = [
-    {file = "mistune-0.8.4-py2.py3-none-any.whl", hash = "sha256:88a1051873018da288eee8538d476dffe1262495144b33ecb586c4ab266bb8d4"},
-    {file = "mistune-0.8.4.tar.gz", hash = "sha256:59a3429db53c50b5c6bcc8a07f8848cb00d7dc8bdb431a4ab41920d201d4756e"},
+    {file = "mistune-2.0.3-py2.py3-none-any.whl", hash = "sha256:e3964140c0775535fba50bd616fe180920044a64bc21850253267b07bff89924"},
+    {file = "mistune-2.0.3.tar.gz", hash = "sha256:d7605b46b6156b53b7d52a465202b29a6f00f4ea4130ad5d25e9d5547d6b7e50"},
 ]
 movingpandas = [
     {file = "movingpandas-0.9rc3.tar.gz", hash = "sha256:6eaf63d0953efcfd62232d50ef1538e5331b4667161b0452c7ddbecfc7f2835f"},
